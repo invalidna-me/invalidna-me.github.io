@@ -1,0 +1,137 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Decoder</title>
+</head>
+<body>
+<form id="frm1">
+  <input type="text" id="inputBox" style="width:100%"><br>
+  <input type="button" onclick="myFunction()" value="Submit">
+</form>
+
+ <table>
+  <tr>
+    <td><b>Hex:</b></td>
+    <td><p id="hexOutput"></p></td>
+  </tr>
+  <tr>
+    <td><b>Base64:</b></td>
+    <td><p id="base64Output"></p></td>
+  </tr>
+  <tr>
+    <td><b>Base32:</b></td>
+    <td><p id="base32Output"></p></td>
+  </tr>
+  <tr>
+    <td><b>URI:</b></td>
+    <td><p id="uriOutput"></p></td>
+  </tr>
+</table> 
+
+<script>
+var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+
+function myFunction() {
+	var input = document.getElementById("inputBox").value;
+
+	var hexText = hex2a(input);
+	var base64Text = Base64.decode(input);
+	var uriText = decodeURI(input);
+	var base32Text = base32Decode(input);
+	
+    document.getElementById("hexOutput").innerHTML = hexText;
+    document.getElementById("base64Output").innerHTML = base64Text;
+    document.getElementById("base32Output").innerHTML = base32Text;
+    document.getElementById("uriOutput").innerHTML = uriText;
+}
+
+function hex2a(hex) {
+    var str = '';
+    for (var i = 0; i < hex.length; i += 2) {
+        var v = parseInt(hex.substr(i, 2), 16);
+        if (v) str += String.fromCharCode(v);
+    }
+    return str;
+}  
+
+function base32Decode(base32EncodedString) {
+     /// <summary>Decodes a base32 encoded string into a Uin8Array, note padding is not supported</summary>
+    /// <param name="base32EncodedString" type="String">The base32 encoded string to be decoded</param>
+    /// <returns type="Uint8Array">The Unit8Array representation of the data that was encoded in base32EncodedString</returns>
+    if (!base32EncodedString && base32EncodedString !== "") {
+        return "base32EncodedString cannot be null or undefined";
+    }
+
+    if (base32EncodedString.length * 5 % 8 !== 0) {
+        return "base32EncodedString is not of the proper length. Please verify padding.";
+    }
+
+    base32EncodedString = base32EncodedString.toLowerCase();
+    var alphabet = "abcdefghijklmnopqrstuvwxyz234567";
+    var returnArray = new Array(base32EncodedString.length * 5 / 8);
+
+    var currentByte = 0;
+    var bitsRemaining = 8;
+    var mask = 0;
+    var arrayIndex = 0;
+	
+	var output = "";
+
+    for (var count = 0; count < base32EncodedString.length; count++) {
+        var currentIndexValue = alphabet.indexOf(base32EncodedString[count]);
+        if (-1 === currentIndexValue) {
+            if ("=" === base32EncodedString[count]) {
+                var paddingCount = 0;
+                for (count = count; count < base32EncodedString.length; count++) {
+                    if ("=" !== base32EncodedString[count]) {
+                        return "Invalid '=' in encoded string";
+                    } else {
+                        paddingCount++;
+                    }
+                }
+
+                switch (paddingCount) {
+                    case 6:
+                        returnArray = returnArray.slice(0, returnArray.length - 4);
+                        break;
+                    case 4:
+                        returnArray = returnArray.slice(0, returnArray.length - 3);
+                        break;
+                    case 3:
+                        returnArray = returnArray.slice(0, returnArray.length - 2);
+                        break;
+                    case 1:
+                        returnArray = returnArray.slice(0, returnArray.length - 1);
+                        break;
+                    default:
+                        return "Incorrect padding";
+                }
+            } else {
+                return "base32EncodedString contains invalid characters or invalid padding.";
+            }
+        } else {
+            if (bitsRemaining > 5) {
+                mask = currentIndexValue << (bitsRemaining - 5);
+                currentByte = currentByte | mask;
+                bitsRemaining -= 5;
+            } else {
+                mask = currentIndexValue >> (5 - bitsRemaining);
+                currentByte = currentByte | mask;
+                returnArray[arrayIndex++] = currentByte;
+                currentByte = currentIndexValue << (3 + bitsRemaining);
+                bitsRemaining += 3;
+            }
+        }
+    }
+	
+	var array = new Uint8Array(returnArray)
+	for (var i =0; i < array.length; i ++)
+	{
+		output += String.fromCharCode(array[i]);
+	}
+
+	return output;
+};
+</script>
+</body>
+</html>
