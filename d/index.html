@@ -26,6 +26,10 @@
     <td><b>URI:</b></td>
     <td><p id="uriOutput"></p></td>
   </tr>
+    <tr>
+    <td><b>Reversed:</b></td>
+    <td><p id="reversedOutput"></p></td>
+  </tr>
 </table> 
 
 <script>
@@ -38,11 +42,13 @@ function myFunction() {
 	var base64Text = Base64.decode(input);
 	var uriText = decodeURI(input);
 	var base32Text = base32Decode(input);
+	var reversedText = reverseString(input);
 	
     document.getElementById("hexOutput").innerHTML = hexText;
     document.getElementById("base64Output").innerHTML = base64Text;
     document.getElementById("base32Output").innerHTML = base32Text;
     document.getElementById("uriOutput").innerHTML = uriText;
+	document.getElementById("reversedOutput").innerHTML = reversedText
 }
 
 function hex2a(hex) {
@@ -131,7 +137,16 @@ function base32Decode(base32EncodedString) {
 	}
 
 	return output;
-};
+}
+
+function reverseString(s)
+{
+  var o = '';
+  for (var i = s.length - 1; i >= 0; i--)
+    o += s[i];
+  return o;
+}
+;
 </script>
 </body>
 </html>
