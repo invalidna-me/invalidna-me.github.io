@@ -1,1 +1,104 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Encoder</title>
+</head>
+<body>
+<form id="frm1">
+  <input type="text" id="inputBox" style="width:100%" autofocus><br>
+  <input type="button" onclick="myFunction()" value="Submit">
+</form>
 
+ <table>
+  <tr>
+    <td><b>Hex:</b></td>
+    <td><p id="hexOutput"></p></td>
+  </tr>
+  <tr>
+    <td><b>Base64:</b></td>
+    <td><p id="base64Output"></p></td>
+  </tr>
+  <tr>
+    <td><b>Base32:</b></td>
+    <td><p id="base32Output"></p></td>
+  </tr>
+  <tr>
+    <td><b>URI:</b></td>
+    <td><p id="uriOutput"></p></td>
+  </tr>
+    <tr>
+    <td><b>Reversed:</b></td>
+    <td><p id="reversedOutput"></p></td>
+  </tr>
+</table> 
+
+<script>
+
+function myFunction() {
+	var input = document.getElementById("inputBox").value;
+
+	//var hexText = hex2a(input);
+	var base64Text = encode64(input);
+	//var uriText = decodeURI(input);
+	//var base32Text = base32Decode(input);
+	var reversedText = reverseString(input);
+	
+    //document.getElementById("hexOutput").innerHTML = hexText;
+    document.getElementById("base64Output").innerHTML = base64Text;
+    //document.getElementById("base32Output").innerHTML = base32Text;
+    //document.getElementById("uriOutput").innerHTML = uriText;
+	document.getElementById("reversedOutput").innerHTML = reversedText
+}
+
+var keyStr = "ABCDEFGHIJKLMNOP" +
+               "QRSTUVWXYZabcdef" +
+               "ghijklmnopqrstuv" +
+               "wxyz0123456789+/" +
+               "=";
+
+  function encode64(input) {
+     input = escape(input);
+     var output = "";
+     var chr1, chr2, chr3 = "";
+     var enc1, enc2, enc3, enc4 = "";
+     var i = 0;
+
+     do {
+        chr1 = input.charCodeAt(i++);
+        chr2 = input.charCodeAt(i++);
+        chr3 = input.charCodeAt(i++);
+
+        enc1 = chr1 >> 2;
+        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+        enc4 = chr3 & 63;
+
+        if (isNaN(chr2)) {
+           enc3 = enc4 = 64;
+        } else if (isNaN(chr3)) {
+           enc4 = 64;
+        }
+
+        output = output +
+           keyStr.charAt(enc1) +
+           keyStr.charAt(enc2) +
+           keyStr.charAt(enc3) +
+           keyStr.charAt(enc4);
+        chr1 = chr2 = chr3 = "";
+        enc1 = enc2 = enc3 = enc4 = "";
+     } while (i < input.length);
+
+     return output;
+  }
+
+function reverseString(s)
+{
+  var o = '';
+  for (var i = s.length - 1; i >= 0; i--)
+    o += s[i];
+  return o;
+}
+;
+</script>
+</body>
+</html>
