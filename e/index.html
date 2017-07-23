@@ -37,16 +37,16 @@
 function myFunction() {
 	var input = document.getElementById("inputBox").value;
 
-	//var hexText = hex2a(input);
+	var hexText = ascii_to_hexa(input);
 	var base64Text = encode64(input);
-	//var uriText = decodeURI(input);
+	//var uriText = array2json(input);
 	//var base32Text = base32Decode(input);
 	var reversedText = reverseString(input);
 	
-    //document.getElementById("hexOutput").innerHTML = hexText;
+    document.getElementById("hexOutput").innerHTML = hexText;
     document.getElementById("base64Output").innerHTML = base64Text;
     //document.getElementById("base32Output").innerHTML = base32Text;
-    //document.getElementById("uriOutput").innerHTML = uriText;
+    document.getElementById("uriOutput").innerHTML = uriText;
 	document.getElementById("reversedOutput").innerHTML = reversedText
 }
 
@@ -90,6 +90,37 @@ var keyStr = "ABCDEFGHIJKLMNOP" +
 
      return output;
   }
+  
+  function array2json(arr) {
+    var parts = [];
+    var is_list = (Object.prototype.toString.apply(arr) === '[object Array]');
+
+    for(var key in arr) {
+    	var value = arr[key];
+        if(typeof value == "object") { //Custom handling for arrays
+            if(is_list) parts.push(array2json(value)); /* :RECURSION: */
+            else parts.push('"' + key + '":' + array2json(value)); /* :RECURSION: */
+            //else parts[key] = array2json(value); /* :RECURSION: */
+            
+        } else {
+            var str = "";
+            if(!is_list) str = '"' + key + '":';
+
+            //Custom handling for multiple data types
+            if(typeof value == "number") str += value; //Numbers
+            else if(value === false) str += 'false'; //The booleans
+            else if(value === true) str += 'true';
+            else str += '"' + value + '"'; //All other things
+            // :TODO: Is there any more datatype we should be in the lookout for? (Functions?)
+
+            parts.push(str);
+        }
+    }
+    var json = parts.join(",");
+    
+    if(is_list) return '[' + json + ']';//Return numerical JSON
+    return '{' + json + '}';//Return associative JSON
+}
 
 function reverseString(s)
 {
@@ -98,6 +129,17 @@ function reverseString(s)
     o += s[i];
   return o;
 }
+function ascii_to_hexa(str)
+  {
+	var arr1 = [];
+	for (var n = 0, l = str.length; n < l; n ++) 
+     {
+		var hex = Number(str.charCodeAt(n)).toString(16);
+		arr1.push(hex);
+	 }
+	return arr1.join('');
+   }
+
 ;
 </script>
 </body>
