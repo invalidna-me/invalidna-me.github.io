@@ -1,0 +1,37 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Project Status</title>
+</head>
+<body>
+<center style="color: #333; padding-top: 200px; font-family: Courier; font-size: 24px; font-weight: bold;">
+<a href="/" rel="nofollow" style="text-decoration: none; color: #333;">
+<table>
+<tr>
+    <td><b>Status</b></td>
+    <td style="padding:0 30px 0 30px;"><b>Reason</b></td>
+	<td><b>Remediation</b></td>
+  </tr>
+  <tr>
+    <td><p id="statusOutput" ></p></td>
+    <td style="padding:0 30px 0 30px;"><p id="reasonOutput"></p></td>
+    <td><p id="remediationOutput"></p></td>
+  </tr>
+</table>
+</a></center>
+  
+<script>
+var project = ["Cost Overruns", "Behind Schedule", "Too Many Bugs", "Work Halted", "Project Late", "Missing Features"];
+var reason = ["Fire Fighting", "Estimates Ignored", "Lack of Resources", "Bad Communication", "Feature Creep", "Poor Requirements"];
+var remediation = ["Add Training", "More Funds", "More Synergy", "Change Priorities", "Extra Resources", "Go Agile"];
+
+var randomStatus = Math.floor((Math.random() * project.length));
+var randomReason = Math.floor((Math.random() * reason.length));
+var randomRemediation = Math.floor((Math.random() * remediation.length));
+
+document.getElementById("statusOutput").innerHTML = project[randomStatus]
+document.getElementById("reasonOutput").innerHTML = reason[randomReason]
+document.getElementById("remediationOutput").innerHTML = remediation[randomRemediation]
+</script>
+</body>
+</html>
