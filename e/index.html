@@ -38,7 +38,7 @@ function myFunction() {
 	var input = document.getElementById("inputBox").value;
 
 	var hexText = ascii_to_hexa(input);
-	var base64Text = encode64(input);
+	var base64Text = base64_encode(input);
 	//var uriText = array2json(input);
 	//var base32Text = base32Decode(input);
 	var reversedText = reverseString(input);
@@ -49,47 +49,57 @@ function myFunction() {
     //document.getElementById("uriOutput").innerHTML = uriText;
 	document.getElementById("reversedOutput").innerHTML = reversedText
 }
-
-var keyStr = "ABCDEFGHIJKLMNOP" +
-               "QRSTUVWXYZabcdef" +
-               "ghijklmnopqrstuv" +
-               "wxyz0123456789+/" +
-               "=";
-
-  function encode64(input) {
-     input = escape(input);
-     var output = "";
-     var chr1, chr2, chr3 = "";
-     var enc1, enc2, enc3, enc4 = "";
-     var i = 0;
-
-     do {
-        chr1 = input.charCodeAt(i++);
-        chr2 = input.charCodeAt(i++);
-        chr3 = input.charCodeAt(i++);
-
-        enc1 = chr1 >> 2;
-        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-        enc4 = chr3 & 63;
-
-        if (isNaN(chr2)) {
-           enc3 = enc4 = 64;
-        } else if (isNaN(chr3)) {
-           enc4 = 64;
-        }
-
-        output = output +
-           keyStr.charAt(enc1) +
-           keyStr.charAt(enc2) +
-           keyStr.charAt(enc3) +
-           keyStr.charAt(enc4);
-        chr1 = chr2 = chr3 = "";
-        enc1 = enc2 = enc3 = enc4 = "";
-     } while (i < input.length);
-
-     return output;
+function base64_encode (stringToEncode) { // eslint-disable-line camelcase
+  var encodeUTF8string = function (str) {
+    // first we use encodeURIComponent to get percent-encoded UTF-8,
+    // then we convert the percent encodings into raw bytes which
+    // can be fed into the base64 encoding algorithm.
+    return encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+      function toSolidBytes (match, p1) {
+        return String.fromCharCode('0x' + p1)
+      })
   }
+  if (typeof window !== 'undefined') {
+    if (typeof window.btoa !== 'undefined') {
+      return window.btoa(encodeUTF8string(stringToEncode))
+    }
+  } else {
+    return new Buffer(stringToEncode).toString('base64')
+  }
+  var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+  var o1
+  var o2
+  var o3
+  var h1
+  var h2
+  var h3
+  var h4
+  var bits
+  var i = 0
+  var ac = 0
+  var enc = ''
+  var tmpArr = []
+  if (!stringToEncode) {
+    return stringToEncode
+  }
+  stringToEncode = encodeUTF8string(stringToEncode)
+  do {
+    // pack three octets into four hexets
+    o1 = stringToEncode.charCodeAt(i++)
+    o2 = stringToEncode.charCodeAt(i++)
+    o3 = stringToEncode.charCodeAt(i++)
+    bits = o1 << 16 | o2 << 8 | o3
+    h1 = bits >> 18 & 0x3f
+    h2 = bits >> 12 & 0x3f
+    h3 = bits >> 6 & 0x3f
+    h4 = bits & 0x3f
+    // use hexets to index into b64, and append result to encoded string
+    tmpArr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4)
+  } while (i < stringToEncode.length)
+  enc = tmpArr.join('')
+  var r = stringToEncode.length % 3
+  return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3)
+}
   
   function array2json(arr) {
     var parts = [];
