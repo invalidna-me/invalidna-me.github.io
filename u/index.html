@@ -1,0 +1,25 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Utilities</title>
+</head>
+<body>
+
+ <table>
+  <tr>
+    <td><b>Lettercount:</b></td>
+	<td><input type="text" id="letterCountInput" style="width:75%" autofocus onkeyup="myFunction()"></td>
+    <td><p id="letterCountOutput"></p></td>
+  </tr>
+ 
+</table> 
+
+<script>
+function myFunction() {
+	var input = document.getElementById("letterCountInput").value;
+
+    document.getElementById("letterCountOutput").innerHTML = input.length;
+}
+</script>
+</body>
+</html>
