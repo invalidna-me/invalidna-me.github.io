@@ -30,25 +30,33 @@
     <td><b>Reversed:</b></td>
     <td><p id="reversedOutput"></p></td>
   </tr>
+  <tr>
+    <td><b>Eval:</b></td>
+    <td><p id="evalEncode"></p></td>
+  </tr>
 </table> 
 
 <script>
 
+	
 function myFunction() {
 	var input = document.getElementById("inputBox").value;
 
 	var hexText = ascii_to_hexa(input);
 	var base64Text = base64_encode(input);
-	//var uriText = array2json(input);
+	var uriText = encodeASCII(input);
 	//var base32Text = base32Decode(input);
 	var reversedText = reverseString(input);
+	var evalEncode = evalEncodeString(input);
 	
     document.getElementById("hexOutput").innerHTML = hexText;
     document.getElementById("base64Output").innerHTML = base64Text;
     //document.getElementById("base32Output").innerHTML = base32Text;
-    //document.getElementById("uriOutput").innerHTML = uriText;
+    document.getElementById("uriOutput").innerHTML = uriText;
 	document.getElementById("reversedOutput").innerHTML = reversedText
+	document.getElementById("evalEncode").innerHTML = evalEncode;
 }
+
 function base64_encode (stringToEncode) { // eslint-disable-line camelcase
   var encodeUTF8string = function (str) {
     // first we use encodeURIComponent to get percent-encoded UTF-8,
@@ -100,7 +108,7 @@ function base64_encode (stringToEncode) { // eslint-disable-line camelcase
   var r = stringToEncode.length % 3
   return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3)
 }
-  
+
   function array2json(arr) {
     var parts = [];
     var is_list = (Object.prototype.toString.apply(arr) === '[object Array]');
@@ -149,6 +157,26 @@ function ascii_to_hexa(str)
 	 }
 	return arr1.join('');
    }
+   
+  function encodeASCII(s)
+{
+  var o = '';
+  for (var i = 0; i <s.length; i++)
+    o += "%" + s[i].charCodeAt(0);
+  return encodeURI(s);
+}
+
+function evalEncodeString(str)
+{
+	var arr1 = [];
+	for (var n = 0, l = str.length; n < l; n ++) 
+     {
+		var hex = Number(str.charCodeAt(n)).toString();
+		arr1.push(hex);
+	 }
+	 var joined = arr1.join(',');
+	return "eval(String.fromCharCode("+joined+"))";
+}
 
 ;
 </script>
