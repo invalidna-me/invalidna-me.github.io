@@ -9,38 +9,44 @@
   <input type="button" onclick="myFunction()" value="Submit">
 </form>
 
- <table>
-  <tr>
-    <td><b>Hex:</b></td>
-    <td><p id="hexOutput"></p></td>
-  </tr>
-  <tr>
-    <td><b>Base64:</b></td>
-    <td><p id="base64Output"></p></td>
-  </tr>
-  <tr>
-    <td><b>Base32:</b></td>
-    <td><p id="base32Output"></p></td>
-  </tr>
-  <tr>
-    <td><b>URI:</b></td>
-    <td><p id="uriOutput"></p></td>
-  </tr>
-    <tr>
-    <td><b>Reversed:</b></td>
-    <td><p id="reversedOutput"></p></td>
-  </tr>
-  <tr>
-    <td><b>Eval:</b></td>
-    <td><p id="evalEncode"></p></td>
-  </tr>
-</table> 
+	<table>
+	  <tr>
+		<td><input type="button" onclick="encode(hexOutput)" value="Hex"></td>
+		<td><p id="hexOutput"></p></td>
+	  </tr>
+	  <tr>
+		<td><input type="button" onclick="encode(base64Output)" value="Base64"></td>
+		<td><p id="base64Output"></p></td>
+	  </tr>
+	  <tr>
+		<td><input type="button" onclick="encode(uriOutput)" value="URI"></td>
+		<td><p id="uriOutput"></p></td>
+	  </tr>
+		<tr>
+		<td><input type="button" onclick="encode(reversedOutput)" value="Reversed"></td>
+		<td><p id="reversedOutput"></p></td>
+	  </tr>
+	  <tr>
+		<td><input type="button" onclick="encode(evalEncode)" value="Eval"></td>
+		<td><p id="evalEncode"></p></td>
+	  </tr>
+	</table> 
+
 
 <script>
 
-	
+
 function myFunction() {
 	var input = document.getElementById("inputBox").value;
+	encrypt(input);
+}
+
+function encode(box) {
+	var input = document.getElementById(box.id).innerHTML;
+	encrypt(input);
+}
+
+function encrypt(input) {
 
 	var hexText = ascii_to_hexa(input);
 	var base64Text = base64_encode(input);
