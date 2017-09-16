@@ -1,0 +1,156 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ROT</title>
+</head>
+<body>
+<form id="frm1">
+  <input type="text" id="inputBox" style="width:100%" autofocus><br>
+  <input type="button" onclick="myFunction()" value="Submit">
+</form>
+
+ <table>
+  <tr>
+    <td><b>ROT1:</b></td>
+    <td><p id="rot1"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT2:</b></td>
+    <td><p id="rot2"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT3:</b></td>
+    <td><p id="rot3"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT4:</b></td>
+    <td><p id="rot4"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT5:</b></td>
+    <td><p id="rot5"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT6:</b></td>
+    <td><p id="rot6"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT7:</b></td>
+    <td><p id="rot7"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT8:</b></td>
+    <td><p id="rot8"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT9:</b></td>
+    <td><p id="rot9"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT10:</b></td>
+    <td><p id="rot10"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT11:</b></td>
+    <td><p id="rot11"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT12:</b></td>
+    <td><p id="rot12"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT13:</b></td>
+    <td><p id="rot13"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT14:</b></td>
+    <td><p id="rot14"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT15:</b></td>
+    <td><p id="rot15"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT16:</b></td>
+    <td><p id="rot16"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT17:</b></td>
+    <td><p id="rot17"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT18:</b></td>
+    <td><p id="rot18"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT19:</b></td>
+    <td><p id="rot19"></p></td>
+  </tr>  
+  <tr>
+    <td><b>ROT20:</b></td>
+    <td><p id="rot20"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT21:</b></td>
+    <td><p id="rot21"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT22:</b></td>
+    <td><p id="rot22"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT23:</b></td>
+    <td><p id="rot23"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT24:</b></td>
+    <td><p id="rot24"></p></td>
+  </tr>
+  <tr>
+    <td><b>ROT25:</b></td>
+    <td><p id="rot25"></p></td>
+  </tr>
+</table> 
+
+<script>
+
+	
+function myFunction() {
+	var input = document.getElementById("inputBox").value;
+	
+    document.getElementById("rot1").innerHTML = rot(1, input);
+    document.getElementById("rot2").innerHTML = rot(2, input);
+    document.getElementById("rot3").innerHTML = rot(3, input);
+    document.getElementById("rot4").innerHTML = rot(4, input);
+    document.getElementById("rot5").innerHTML = rot(5, input);
+    document.getElementById("rot6").innerHTML = rot(6, input);
+    document.getElementById("rot7").innerHTML = rot(7, input);
+    document.getElementById("rot8").innerHTML = rot(8, input);
+    document.getElementById("rot9").innerHTML = rot(9, input);
+    document.getElementById("rot10").innerHTML = rot(10, input);
+	  document.getElementById("rot11").innerHTML = rot(11, input);
+    document.getElementById("rot12").innerHTML = rot(12, input);
+    document.getElementById("rot13").innerHTML = rot(13, input);
+    document.getElementById("rot14").innerHTML = rot(14, input);
+    document.getElementById("rot15").innerHTML = rot(15, input);
+    document.getElementById("rot16").innerHTML = rot(16, input);
+    document.getElementById("rot17").innerHTML = rot(17, input);
+    document.getElementById("rot18").innerHTML = rot(18, input);
+    document.getElementById("rot19").innerHTML = rot(19, input);
+    document.getElementById("rot20").innerHTML = rot(10, input);
+	  document.getElementById("rot21").innerHTML = rot(21, input);
+    document.getElementById("rot22").innerHTML = rot(22, input);
+    document.getElementById("rot23").innerHTML = rot(23, input);
+    document.getElementById("rot24").innerHTML = rot(24, input);
+    document.getElementById("rot25").innerHTML = rot(25, input);
+}
+
+function rot(i, s) {
+  return s.replace( /[A-Za-z]/g , function(c) {
+	return String.fromCharCode( c.toUpperCase().charCodeAt(0) +  i <= 90 ? c.toUpperCase().charCodeAt(0) +  i : c.toUpperCase().charCodeAt(0) +  i - 26 );
+  } );
+}
+;
+</script>
+</body>
+</html>
