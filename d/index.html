@@ -11,23 +11,23 @@
 
  <table>
   <tr>
-    <td><b>Hex:</b></td>
+    <td><input type="button" onclick="decode(hexOutput)" value="Hex"></td>
     <td><p id="hexOutput"></p></td>
   </tr>
   <tr>
-    <td><b>Base64:</b></td>
+    <td><input type="button" onclick="decode(base64Output)" value="Base64"></td>
     <td><p id="base64Output"></p></td>
   </tr>
   <tr>
-    <td><b>Base32:</b></td>
+    <td><input type="button" onclick="decode(base32Output)" value="Base32"></td>
     <td><p id="base32Output"></p></td>
   </tr>
   <tr>
-    <td><b>URI:</b></td>
+    <td><input type="button" onclick="decode(uriOutput)" value="URI"></td>
     <td><p id="uriOutput"></p></td>
   </tr>
     <tr>
-    <td><b>Reversed:</b></td>
+    <td><input type="button" onclick="decode(reversedOutput)" value="Reversed"></td>
     <td><p id="reversedOutput"></p></td>
   </tr>
 </table> 
@@ -37,6 +37,15 @@ var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456
 
 function myFunction() {
 	var input = document.getElementById("inputBox").value;
+	decrypt(input);
+}
+
+function decode(box) {
+	var input = document.getElementById(box.id).innerHTML;
+	decrypt(input);
+}
+
+function decrypt(input) {
 
 	var hexText = hex2a(input);
 	var base64Text = Base64.decode(input);
