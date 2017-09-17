@@ -31,6 +31,10 @@
     <td><p id="reversedOutput"></p></td>
   </tr>
   <tr>
+    <td><input type="button" onclick="decode(binaryOutput)" value="Binary"></td>
+    <td><p id="binaryOutput"></p></td>
+  </tr>
+  <tr>
     <td><b>Hash Type:</b></td>
     <td><p id="hashType"></p></td>
   </tr>
@@ -51,8 +55,6 @@ function decode(box) {
 }
 
 function decrypt(input) {
-	var hexText = hex2a(input);
-	var base64Text = Base64.decode(input);
 	var uriText;
 	try {
 		uriText = decodeURI(input);
@@ -60,16 +62,14 @@ function decrypt(input) {
 	catch(err) {
 		uriText = "ERROR";
 	}
-	var base32Text = base32Decode(input);
-	var reversedText = reverseString(input);
-	var hashType = determineHashType(input);
 	
-    document.getElementById("hexOutput").innerHTML = hexText;
-    document.getElementById("base64Output").innerHTML = base64Text;
-    document.getElementById("base32Output").innerHTML = base32Text;
+    document.getElementById("hexOutput").innerHTML = hex2a(input);
+    document.getElementById("base64Output").innerHTML = Base64.decode(input);
+    document.getElementById("base32Output").innerHTML = base32Decode(input);
     document.getElementById("uriOutput").innerHTML = uriText;
-    document.getElementById("reversedOutput").innerHTML = reversedText
-    document.getElementById("hashType").innerHTML  = '<a href = "https://en.wikipedia.org/wiki/List_of_hash_functions">Wikipedia</a> Best Guess:' + hashType
+    document.getElementById("reversedOutput").innerHTML = reverseString(input);
+    document.getElementById("binaryOutput").innerHTML = binary2Ascii(input);
+    document.getElementById("hashType").innerHTML  = '<a href = "https://en.wikipedia.org/wiki/List_of_hash_functions">Wikipedia</a> Best Guess:' + determineHashType(input);
 }
 
 function determineHashType(str) {
@@ -191,6 +191,16 @@ function reverseString(s)
   for (var i = s.length - 1; i >= 0; i--)
     o += s[i];
   return o;
+}
+
+function binary2Ascii(str) {
+
+    var binString = '';
+
+    str.replace(/\s/g, '').match(/.{1,8}/g).map(function(bin) {
+        binString += String.fromCharCode(parseInt(bin, 2));
+    });
+    return binString;
 }
 ;
 </script>
