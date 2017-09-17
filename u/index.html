@@ -5,20 +5,40 @@
 </head>
 <body>
 
- <table>
+ <table width ="100%">
   <tr>
-    <td><b>Lettercount:</b></td>
-	<td><input type="text" id="letterCountInput" style="width:75%" autofocus onkeyup="myFunction()"></td>
+    <td width ="150"><b>Lettercount:</b></td>
+	<td width="150"><input type="text" id="letterCountInput" autofocus onkeyup="count()"></td>
     <td><p id="letterCountOutput"></p></td>
+  </tr>
+  <tr>
+    <td><b>Lowercase:</b></td>
+	<td><input type="text" id="lowercaseInput" autofocus onkeyup="lowercase()"></td>
+    <td><p id="lowerCaseOutput"></p></td>
+  </tr>
+  <tr>
+    <td><b>Uppercase:</b></td>
+	<td><input type="text" id="uppercaseInput" autofocus onkeyup="uppercase()"></td>
+    <td><p id="uppercaseOutput"></p></td>
   </tr>
  
 </table> 
 
 <script>
-function myFunction() {
+function count() {
 	var input = document.getElementById("letterCountInput").value;
 
     document.getElementById("letterCountOutput").innerHTML = input.length;
+}
+function lowercase() {
+	var input = document.getElementById("lowercaseInput").value;
+
+    document.getElementById("lowerCaseOutput").innerHTML = input.toLowerCase();
+}
+function uppercase() {
+	var input = document.getElementById("uppercaseInput").value;
+
+    document.getElementById("uppercaseOutput").innerHTML = input.toUpperCase();
 }
 </script>
 </body>
