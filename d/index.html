@@ -68,8 +68,8 @@ function decrypt(input) {
     document.getElementById("base64Output").innerHTML = base64Text;
     document.getElementById("base32Output").innerHTML = base32Text;
     document.getElementById("uriOutput").innerHTML = uriText;
-	document.getElementById("reversedOutput").innerHTML = reversedText
-	document.getElementById("hashType").innerHTML  = hashType
+    document.getElementById("reversedOutput").innerHTML = reversedText
+    document.getElementById("hashType").innerHTML  = '<a href = "https://en.wikipedia.org/wiki/List_of_hash_functions">Wikipedia</a> Best Guess:' + hashType
 }
 
 function determineHashType(str) {
