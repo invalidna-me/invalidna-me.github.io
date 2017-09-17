@@ -42,14 +42,20 @@ function myFunction() {
 
 function decode(box) {
 	var input = document.getElementById(box.id).innerHTML;
+	document.getElementById("inputBox").value = input;
 	decrypt(input);
 }
 
 function decrypt(input) {
-
 	var hexText = hex2a(input);
 	var base64Text = Base64.decode(input);
-	var uriText = decodeURI(input);
+	var uriText;
+	try {
+		uriText = decodeURI(input);
+	}
+	catch(err) {
+		uriText = "ERROR";
+	}
 	var base32Text = base32Decode(input);
 	var reversedText = reverseString(input);
 	
