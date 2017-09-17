@@ -26,9 +26,13 @@
     <td><input type="button" onclick="decode(uriOutput)" value="URI"></td>
     <td><p id="uriOutput"></p></td>
   </tr>
-    <tr>
+  <tr>
     <td><input type="button" onclick="decode(reversedOutput)" value="Reversed"></td>
     <td><p id="reversedOutput"></p></td>
+  </tr>
+  <tr>
+    <td><b>Hash Type:</b></td>
+    <td><p id="hashType"></p></td>
   </tr>
 </table> 
 
@@ -58,13 +62,40 @@ function decrypt(input) {
 	}
 	var base32Text = base32Decode(input);
 	var reversedText = reverseString(input);
+	var hashType = determineHashType(input);
 	
     document.getElementById("hexOutput").innerHTML = hexText;
     document.getElementById("base64Output").innerHTML = base64Text;
     document.getElementById("base32Output").innerHTML = base32Text;
     document.getElementById("uriOutput").innerHTML = uriText;
 	document.getElementById("reversedOutput").innerHTML = reversedText
+	document.getElementById("hashType").innerHTML  = hashType
 }
+
+function determineHashType(str) {
+	var size = sizeof(str);
+	switch (size) {
+        case 128: return "MD5 (128 bits)";
+        case 160: return "SHA-1 (160 bits)";
+		case 224: return "SHA-224 (224 bits)";		
+        case 256: return "SHA-256 (256 bits)";
+        case 384: return "SHA-384 (384 bits)";
+        case 512: return "SHA-512 (512 bits)";
+        case 448: return "BCrypt (448 bits)";		
+    }
+	
+	return "Invalid/Unknown  (" + size+ " bits)";
+}
+
+function sizeof(input) {
+
+    var size = 0;
+    for (var i = 0; i < input.length; i++) {
+        size += 4 * input[i].length;
+    }
+    return size;
+};
+
 
 function hex2a(hex) {
     var str = '';
