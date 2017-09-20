@@ -1,0 +1,87 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>bBKMGT</title>
+</head>
+<body>
+<form id="frm1">
+  <table width="100%">
+	  <tr>
+		<td width="50%"><input type="text" id="inputBox" style="width:100%" autofocus><br></td>
+		<td> 
+		 <select id="unit_type">
+		  <option value="bits">bits</option>
+		  <option value="Bytes">Bytes</option>
+		  <option value="Kilobytes">Kilobytes</option>
+		  <option value="Megabytes">Megabytes</option>
+		  <option value="Gigabytes">Gigabytes</option>
+		  <option value="Terrabytes">Terrabytes</option>
+		 </select>
+		</td>
+	  </tr>
+	  </table>
+  
+  <input type="submit" formaction="javascript:myFunction()" value="Submit">
+</form>
+
+	<table>
+	  <tr>
+		<td><b>Bits</b></td>
+		<td><p id="bitsOutputs"></p></td>
+	  </tr>
+		<td><b>Bytes</b></td>
+		<td><p id="bytesOutputs"></p></td>
+	  </tr>
+		<td><b>Kilobytes</b></td>
+		<td><p id="kilobytesOutputs"></p></td>
+	  </tr>
+		<td><b>Megabytes</b></td>
+		<td><p id="megabytesOutputs"></p></td>
+	  </tr>
+		<td><b>Gigabytes</b></td>
+		<td><p id="gigabytesOutputs"></p></td>
+	  </tr>
+		<td><b>Terrabytes</b></td>
+		<td><p id="terrabytesOutputs"></p></td>
+	  </tr>
+	</table> 
+
+
+<script>
+
+
+function myFunction() {
+	var input = document.getElementById("inputBox").value;
+	var unit = document.getElementById("unit_type").value;
+	var bits = convertToBits(input, unit)
+	
+	 document.getElementById("bitsOutputs").innerHTML = bits;
+	 document.getElementById("bytesOutputs").innerHTML = bits / 8;
+	 document.getElementById("kilobytesOutputs").innerHTML = bits / (8 * 1000);
+	 document.getElementById("megabytesOutputs").innerHTML = bits / (8 * 1000 * 1000);
+	 document.getElementById("gigabytesOutputs").innerHTML = bits / (8 * 1000 * 1000 * 1000);
+	 document.getElementById("terrabytesOutputs").innerHTML = bits / (8 * 1000 * 1000 * 1000 * 1000);
+}
+
+function convertToBits(input, unit) {
+	switch(unit) {
+    case 'bits':
+        return input;
+    case 'Bytes':
+        return input * 8;
+    case 'Kilobytes':
+        return input * 8 * 1000;
+    case 'Megabytes':
+        return input * 8 * 1000 * 1000;
+    case 'Gigabytes':
+        return input * 8 * 1000 * 1000 * 1000;
+    case 'Terrabytes':
+        return input * 8 * 1000 * 1000 * 1000 * 1000;
+	}
+}	
+
+
+;
+</script>
+</body>
+</html>
