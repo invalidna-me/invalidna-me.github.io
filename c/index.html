@@ -1,0 +1,143 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Checklist</title>
+</head>
+<body>
+<style>
+#block_container {
+  display: flex;
+  justify-content: center;
+}
+</style>
+<form id="frm1">
+	<center><input type="text" style="width:33%" id="title"><input type="button" onclick="generate()" value="Go"></center>
+	<table width="100%">
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>whatweb -v -a 3 <span id="id1"></td>
+		 <td style="width:75%"><textarea type="text" style="width:99%" id="whatweb"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>wget -qO- <span id="id2"></span><span>/robots.txt</span></td>
+		 <td><textarea type="text" style="width:99%" id="robot"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>Look for META robot tags</td>
+		 <td><textarea type="text" style="width:99%" id="metaRobot"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>Spider host</td>
+		 <td><textarea type="text" style="width:99%" id="spider"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>dirb <span id="id5"></td>
+		 <td><textarea type="text" style="width:99%" id="dirb"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>nmap -PN -sT -sV -p0-65535 <span id="id6"></td>
+		 <td><textarea type="text" style="width:99%" id="nmap"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>dnsenum -p 20 -s 100 --threads 5 <span id="id7"></td>
+		 <td><textarea type="text" style="width:99%" id="nsenum"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>cd ~/subbrute/ && python subbrute.py <span id="id8"></td>
+		 <td><textarea type="text" style="width:99%" id="subbrute"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>dnsrecon <span id="id9"></td>
+		 <td><textarea type="text" style="width:99%" id="dnsrecon"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>dig @nameserver axfr <span id="id1"></td>
+		 <td><textarea type="text" style="width:99%" id="dig"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>fierce -dns <span id="id11"></td>
+		 <td><textarea type="text" style="width:99%" id="fierce"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>nslookup</td>
+		 <td><textarea type="text" style="width:99%" id="nslookup"></textarea></td>
+		</tr>
+		<tr>
+		 <td><input type="checkbox"/></td>
+		 <td>nikto -host <span id="id13"></td>
+		 <td><textarea type="text" style="width:99%" id="nikto"></textarea></td>
+		</tr>
+	  
+	</table>
+  <input type="button" id="dwn-btn" value="Download">
+</form>
+<script>
+function generateText() {
+	var text = document.getElementById("title").value +"\n\n";
+	text = text + "whatweb" + "\n\n" + document.getElementById("whatweb").value + "\n\n";
+	text = text + "robot.txt" + "\n\n" + document.getElementById("robot").value + "\n\n";
+	text = text + "META robot" + "\n\n" + document.getElementById("metaRobot").value + "\n\n";
+	text = text + "Spider" + "\n\n" + document.getElementById("spider").value + "\n\n";
+	text = text + "dirb" + "\n\n" + document.getElementById("dirb").value + "\n\n";
+	text = text + "nmap" + "\n\n" + document.getElementById("nmap").value + "\n\n";
+	text = text + "nseum" + "\n\n" + document.getElementById("nsenum").value + "\n\n";
+	text = text + "subbrute" + "\n\n" + document.getElementById("subbrute").value + "\n\n";
+	text = text + "dnsrecon" + "\n\n" + document.getElementById("dnsrecon").value + "\n\n";
+	text = text + "dig" + "\n\n" + document.getElementById("dig").value + "\n\n";
+	text = text + "fierce" + "\n\n" + document.getElementById("fierce").value + "\n\n";
+	text = text + "nslookup" + "\n\n" + document.getElementById("nslookup").value + "\n\n";
+	text = text + "nikto" + "\n\n" + document.getElementById("nikto").value + "\n\n";
+	return text;
+}
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+// Start file download.
+document.getElementById("dwn-btn").addEventListener("click", function(){
+    // Generate download of hello.txt file with some content
+    var text = generateText();
+    var filename = document.getElementById("title").value + ".txt";
+    
+    download(filename, text);
+}, false);
+
+function generate() {
+    var host = document.getElementById("title").value;
+	document.getElementById("id1").innerHTML=host;
+	document.getElementById("id2").innerHTML=host;
+	
+	document.getElementById("id5").innerHTML=host;
+	document.getElementById("id6").innerHTML=host.substring(7);
+	document.getElementById("id7").innerHTML=host.substring(11);	
+	document.getElementById("id8").innerHTML=host.substring(11);
+	document.getElementById("id9").innerHTML=host.substring(11);
+	
+	document.getElementById("id11").innerHTML=host.substring(11);
+	
+	document.getElementById("id13").innerHTML=host.substring(7);
+}
+</script>
+
+</body>
+</html>
