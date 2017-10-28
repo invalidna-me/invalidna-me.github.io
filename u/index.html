@@ -21,6 +21,11 @@
 	<td><input type="text" id="uppercaseInput" autofocus onkeyup="uppercase()"></td>
     <td><p id="uppercaseOutput"></p></td>
   </tr>
+  <tr>
+    <td><b>Post changer:</b></td>
+	<td><input type="text" id="postChangeInput" autofocus onkeyup="postChange()"></td>
+    <td><p id="postChangeOutput"></p></td>
+  </tr>
  
 </table> 
 
@@ -39,6 +44,12 @@ function uppercase() {
 	var input = document.getElementById("uppercaseInput").value;
 
     document.getElementById("uppercaseOutput").innerHTML = input.toUpperCase();
+}
+function postChange() {
+	var input = document.getElementById("postChangeInput").value;
+	input=input.replace(/&/g, "','");
+	input=input.replace(/=/g,"':'");
+    document.getElementById("postChangeOutput").innerHTML = "'" + input + "'";
 }
 </script>
 </body>
