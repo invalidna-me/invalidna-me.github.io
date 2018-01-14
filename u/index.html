@@ -26,6 +26,11 @@
 	<td><input type="text" id="postChangeInput" autofocus onkeyup="postChange()"></td>
     <td><p id="postChangeOutput"></p></td>
   </tr>
+  <tr>
+    <td><b>Memory flipper:</b></td>
+	<td><input type="text" id="memFlipInput" autofocus onkeyup="memFlip()"></td>
+    <td><p id="memFlipOutput"></p></td>
+  </tr>
  
 </table> 
 
@@ -50,6 +55,17 @@ function postChange() {
 	input=input.replace(/&/g, "','");
 	input=input.replace(/=/g,"':'");
     document.getElementById("postChangeOutput").innerHTML = "'" + input + "'";
+}
+function memFlip() {
+	var input = document.getElementById("memFlipInput").value;
+	if (input.startsWith("0x")){
+		input = input.substring(2);
+	}
+	output = ""
+	for (i = input.length - 2; i >= 0; i = i - 2) {
+		output += '\\x' +  input.substring(i, i + 2);
+	}
+	document.getElementById("memFlipOutput").innerHTML = '"' + output + '"'
 }
 </script>
 </body>
