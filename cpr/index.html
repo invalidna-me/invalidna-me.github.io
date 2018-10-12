@@ -1,0 +1,104 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CPR</title>
+</head>
+<body>
+<style type="text/css">
+
+html, body {
+	height: 100%;
+}
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+	color: #333; 
+	font-family: Courier; 
+	font-size: 24px; 
+	font-weight: bold;
+}
+/* ie8 beta allocates space for the empty <a> tag! this fixes it */
+/* also it doesn't work correctly in Opera and this also fixes that */
+#top {
+	position: absolute;
+}
+/* <h1>, <p> etc throws the height out, so change it to have padding instead of margins to fix it */
+h1, p {
+	margin: 0;
+	padding: 0.3em 0;
+}
+
+#container {
+	min-height: 100%; /* use min-height not height, to prevent overlap */
+	margin-bottom: -36px; /* = #footer height+padding+border, to prevent overlap */
+}
+* html #container {
+	height: 100%; /* ie6 doesn't support min-height, so need to use height */
+}
+
+#footer-spacer {
+	height: 36px; /* = #container margin-bottom plus any extra space required between #container and #footer */
+}
+#footer {
+	border-top: 1px solid #000;
+	height: 35px;
+	text-decoration: none; 
+	color: #333;
+}
+a {text-decoration: none; color: #333; }
+</style>
+
+<div id="top"></div>
+<div id="container">
+    <form id="frm1">
+		<center><img src="cpr.png" alt="Press Here" height="420" width="420" onclick="generate()"/></center>
+		<center style="font-size:30px"><span id="output"></center>
+	</form>
+    <div id="footer-spacer"></div>   
+</div>
+
+<script>
+
+var lastPress = null;
+var times = [];
+
+function generate() {
+    var now = Date.now();  
+	document.getElementById("output").innerHTML="Measuring...";
+	if (lastPress != null) {
+		var timeDifference = now - lastPress;
+		times.push(timeDifference);
+			
+		if (times.length >= 5) {
+			times.shift()
+			
+			var timeSum = 0;
+			for( var i = 0; i < times.length; i++ ){
+				timeSum += parseInt( times[i], 10 );
+			}
+
+			var timeAve = timeSum/times.length;
+			
+			bpm = Math.round(60000/timeAve);
+			measure = bpm - 110;
+			var comment = ""
+			if (Math.abs(measure) <= 10) {
+				comment = "Good";
+			} else if (measure > 0) {
+				comment = "Too fast";
+			} else if (measure < 0) {
+				comment = "Too slow";
+			}
+			
+			document.getElementById("output").innerHTML = comment + " (" + bpm + " bpm)";
+		}
+	}
+		
+	lastPress = now;
+}
+</script>
+<div id="footer">
+Recommend between 100 and 120 beats per minute - <a href="https://eccguidelines.heart.org/wp-content/uploads/2015/10/2015-AHA-Guidelines-Highlights-English.pdf">Link</a>
+</body>
+</html>
