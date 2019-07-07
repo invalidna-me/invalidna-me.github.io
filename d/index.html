@@ -35,6 +35,10 @@
     <td><p id="binaryOutput"></p></td>
   </tr>
   <tr>
+    <td><input type="button" onclick="decode(morseOutput)" value="Morse"></td>
+    <td><p id="morseOutput"></p></td>
+  </tr>
+  <tr>
     <td><b>Hash Type:</b></td>
     <td><p id="hashType"></p></td>
   </tr>
@@ -69,7 +73,9 @@ function decrypt(input) {
     document.getElementById("uriOutput").innerHTML = uriText;
     document.getElementById("reversedOutput").innerHTML = reverseString(input);
     document.getElementById("binaryOutput").innerHTML = binary2Ascii(input);
-    document.getElementById("hashType").innerHTML  = '<a href = "https://en.wikipedia.org/wiki/List_of_hash_functions">Wikipedia</a> <a href = "https://crackstation.net/">CrackStation</a> Best Guess:' + determineHashType(input);
+	document.getElementById("morseOutput").innerHTML = morseDecode(input);
+    document.getElementById("hashType").innerHTML  = '<a href = "https://en.wikipedia.org/wiki/List_of_hash_functions">Wikipedia</a> Best Guess:' + determineHashType(input);
+	
 }
 
 function determineHashType(str) {
@@ -105,6 +111,58 @@ function hex2a(hex) {
     }
     return str;
 }  
+
+
+function morseDecode(morseCode) {
+  var ref = { 
+    '.-':     'a',
+    '-...':   'b',
+    '-.-.':   'c',
+    '-..':    'd',
+    '.':      'e',
+    '..-.':   'f',
+    '--.':    'g',
+    '....':   'h',
+    '..':     'i',
+    '.---':   'j',
+    '-.-':    'k',
+    '.-..':   'l',
+    '--':     'm',
+    '-.':     'n',
+    '---':    'o',
+    '.--.':   'p',
+    '--.-':   'q',
+    '.-.':    'r',
+    '...':    's',
+    '-':      't',
+    '..-':    'u',
+    '...-':   'v',
+    '.--':    'w',
+    '-..-':   'x',
+    '-.--':   'y',
+    '--..':   'z',
+    '.----':  '1',
+    '..---':  '2',
+    '...--':  '3',
+    '....-':  '4',
+    '.....':  '5',
+    '-....':  '6',
+    '--...':  '7',
+    '---..':  '8',
+    '----.':  '9',
+    '-----':  '0'
+  };
+
+  return morseCode
+    .split('   ')
+    .map(
+      a => a
+        .split(' ')
+        .map(
+          b => ref[b]
+        ).join('')
+    ).join(' ');
+}
 
 function base32Decode(base32EncodedString) {
      /// <summary>Decodes a base32 encoded string into a Uin8Array, note padding is not supported</summary>
