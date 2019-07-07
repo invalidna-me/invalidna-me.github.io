@@ -67,7 +67,7 @@ function decrypt(input) {
 		uriText = "ERROR";
 	}
 	
-    document.getElementById("hexOutput").innerHTML = hex2a(input);
+    document.getElementById("hexOutput").innerHTML = hex2a(input.replace(/\s/g,''));
     document.getElementById("base64Output").innerHTML = Base64.decode(input);
     document.getElementById("base32Output").innerHTML = base32Decode(input);
     document.getElementById("uriOutput").innerHTML = uriText;
