@@ -248,6 +248,18 @@
     <td><p id="atbash"></p></td>
   </tr>
   <tr>
+    <td><input type="button" onclick="decode(num2Letter)" value="num2Letter"></td>
+    <td><p id="num2Letter"></p></td>
+  </tr>
+  <tr>
+    <td><input type="button" onclick="decode(unique)" value="unique"></td>
+    <td><p id="unique"></p></td>
+  </tr>
+  <tr>
+    <td><input type="button" onclick="decode(roman)" value="roman"></td>
+    <td><p id="roman"></p></td>
+  </tr>
+  <tr>
     <td><b>Hash Type:</b></td>
     <td><p id="hashType"></p></td>
   </tr>
@@ -336,7 +348,10 @@ function decrypt(input) {
 	document.getElementById("railfence7").innerHTML = railfence(7, input);
 	document.getElementById("railfence8").innerHTML = railfence(8, input);
 	document.getElementById("railfence9").innerHTML = railfence(9, input);
-	document.getElementById("atbash").innerHTML = atbash(input);
+	document.getElementById("atbash").innerHTML = atbashFunc(input);
+	document.getElementById("num2Letter").innerHTML = num2LetterFunc(input);
+	document.getElementById("unique").innerHTML = uniqFunc(input);
+	document.getElementById("roman").innerHTML = fromRomanFunc(input);
 	
     document.getElementById("hashType").innerHTML  = '<a href = "https://en.wikipedia.org/wiki/List_of_hash_functions">Wikipedia</a> <a href = "https://crackstation.net/">CrackStation</a> Best Guess:' + determineHashType(input);
 	
@@ -660,7 +675,7 @@ function railfence(key, ciphertext) {
       return pt.join("");
     }
 }
-function atbash(mensage) {
+function atbashFunc(mensage) {
 	var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     var tebahpla = "ZYXWVUTSRQPONMLKJIHGFEDCBA";
     var alphabet1 = "abcdefghijklmnopqrstuvwxyz";
@@ -686,7 +701,107 @@ function atbash(mensage) {
     }
     return decoded_string;
 }
+function num2LetterFunc(message) {
+	var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	var split = message.split(".");
 
+	var string = ""
+
+    for (var i = 0; i < split.length; i++) {
+		if (split[i].includes(" ")) {
+			var splittysplit = split[i].split(" ");
+			for (var j = 0; j< splittysplit.length; j++) {
+				var number = splittysplit[j];
+				var letter = alphabet.charAt(number - 1)
+				string += letter;
+				if (j +1 < splittysplit.length) {
+					string += " " 
+				}
+			}
+		} else {
+			var number = split[i];
+			string += alphabet.charAt(number - 1);
+		}
+	}
+	
+    return string;
+}
+function uniqFunc(message) {
+	var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	var split = message.split(".");
+
+	var string = ""
+	var dict = {};
+	var index = 0;
+
+    for (var i = 0; i < split.length; i++) {
+		if (split[i].includes(" ")) {
+			var splittysplit = split[i].split(" ");
+			for (var j = 0; j< splittysplit.length; j++) {
+				var number = splittysplit[j];
+				if (!(number in dict)) {
+					dict[number] = alphabet[index++]
+				}
+				var letter = dict[number]
+				string += letter;
+				if (j +1 < splittysplit.length) {
+					string += " " 
+				}
+			}
+		} else {
+			var number = split[i];
+			if (!(number in dict)) {
+				dict[number] = alphabet[index++]
+			}
+			var letter = dict[number]
+			string += letter;
+		}
+	}
+	
+    return string;
+}
+function fromRoman(str) {  
+  var result = 0;
+  // the result is now a number, not a string
+  var decimal = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+  var roman = ["M", "CM","D","CD","C", "XC", "L", "XL", "X","IX","V","IV","I"];
+  for (var i = 0;i<=decimal.length;i++) {
+    while (str.indexOf(roman[i]) === 0){
+    //checking for the first characters in the string
+      result += decimal[i];
+      //adding the decimal value to our result counter
+      str = str.replace(roman[i],'');
+      //remove the matched Roman letter from the beginning
+    }
+  }
+  return result;
+}
+function fromRomanFunc(message) {
+	var string = ""
+	message = message.toUpperCase()
+	var split = message.split(".");
+    for (var i = 0; i < split.length; i++) {
+		if (split[i].includes(" ")) {
+			var splittysplit = split[i].split(" ");
+			for (var j = 0; j< splittysplit.length; j++) {
+				var rmn =  splittysplit[j];
+				var number = fromRoman(rmn)
+				string += number;
+				if (j +1 < splittysplit.length) {
+					string += " " 
+				}else{
+					string += "." 
+				}
+			}
+		} else {
+			var rmn = split[i];
+			var number = fromRoman(rmn)
+			string += number + ".";
+		}
+	}
+	
+    return string;
+}
 
 </script>
 </body>
