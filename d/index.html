@@ -39,6 +39,34 @@
     <td><p id="morseOutput"></p></td>
   </tr>
   <tr>
+    <td><input type="button" onclick="decode(polybius)" value="polybius"></td>
+    <td><p id="polybius"></p></td>
+  </tr>
+  <tr>
+    <td><input type="button" onclick="decode(polybiusFlipped)" value="polybiusFlipped"></td>
+    <td><p id="polybiusFlipped"></p></td>
+  </tr>
+  <tr>
+    <td><input type="button" onclick="decode(atbash)" value="atbash"></td>
+    <td><p id="atbash"></p></td>
+  </tr>
+  <tr>
+    <td><input type="button" onclick="decode(num2Letter)" value="num2Letter"></td>
+    <td><p id="num2Letter"></p></td>
+  </tr>
+  <tr>
+    <td><input type="button" onclick="decode(unique)" value="unique"></td>
+    <td><p id="unique"></p></td>
+  </tr>
+  <tr>
+    <td><input type="button" onclick="decode(roman)" value="roman"></td>
+    <td><p id="roman"></p></td>
+  </tr>
+  <tr>
+    <td><input type="button" onclick="decode(octal)" value="octal"></td>
+    <td><p id="octal"></p></td>
+  </tr>
+  <tr>
     <td><input type="button" onclick="decode(rot1)" value="ROT1"></td>
     <td><p id="rot1"></p></td>
   </tr>
@@ -139,14 +167,6 @@
     <td><p id="rot25"></p></td>
   </tr>
   <tr>
-    <td><input type="button" onclick="decode(polybius)" value="polybius"></td>
-    <td><p id="polybius"></p></td>
-  </tr>
-  <tr>
-    <td><input type="button" onclick="decode(polybiusFlipped)" value="polybiusFlipped"></td>
-    <td><p id="polybiusFlipped"></p></td>
-  </tr>
-  <tr>
     <td><input type="button" onclick="decode(scytale2)" value="scytale2"></td>
     <td><p id="scytale2"></p></td>
   </tr>
@@ -244,22 +264,6 @@
     <td><p id="railfence9"></p></td>
   </tr>
   <tr>
-    <td><input type="button" onclick="decode(atbash)" value="atbash"></td>
-    <td><p id="atbash"></p></td>
-  </tr>
-  <tr>
-    <td><input type="button" onclick="decode(num2Letter)" value="num2Letter"></td>
-    <td><p id="num2Letter"></p></td>
-  </tr>
-  <tr>
-    <td><input type="button" onclick="decode(unique)" value="unique"></td>
-    <td><p id="unique"></p></td>
-  </tr>
-  <tr>
-    <td><input type="button" onclick="decode(roman)" value="roman"></td>
-    <td><p id="roman"></p></td>
-  </tr>
-  <tr>
     <td><b>Hash Type:</b></td>
     <td><p id="hashType"></p></td>
   </tr>
@@ -352,6 +356,7 @@ function decrypt(input) {
 	document.getElementById("num2Letter").innerHTML = num2LetterFunc(input);
 	document.getElementById("unique").innerHTML = uniqFunc(input);
 	document.getElementById("roman").innerHTML = fromRomanFunc(input);
+	document.getElementById("octal").innerHTML = decodeOct(input);
 	
     document.getElementById("hashType").innerHTML  = '<a href = "https://en.wikipedia.org/wiki/List_of_hash_functions">Wikipedia</a> <a href = "https://crackstation.net/">CrackStation</a> Best Guess:' + determineHashType(input);
 	
@@ -801,6 +806,22 @@ function fromRomanFunc(message) {
 	}
 	
     return string;
+}
+
+function decodeOct(octBytes) {
+  return bytesToChars(octToDecBytes(octBytes.replace(/ /g,'').match(/[\s\S]{1,3}/g))).join('');
+}
+
+function bytesToChars(bytes) {
+  return bytes.map(function(byte) {
+    return String.fromCharCode(parseInt(byte, 10));
+  });
+}
+
+function octToDecBytes(octBytes) {
+  return octBytes.map(function(oct) {
+    return parseInt(oct, 8);
+  });
 }
 
 </script>
