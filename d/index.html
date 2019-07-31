@@ -23,6 +23,10 @@
     <td><p id="base32Output"></p></td>
   </tr>
   <tr>
+    <td><input type="button" onclick="decode(ascii)" value="Ascii"></td>
+    <td><p id="ascii"></p></td>
+  </tr>
+  <tr>
     <td><input type="button" onclick="decode(uriOutput)" value="URI"></td>
     <td><p id="uriOutput"></p></td>
   </tr>
@@ -295,6 +299,7 @@ function decrypt(input) {
     document.getElementById("hexOutput").innerHTML = hex2a(input.replace(/\s/g,''));
     document.getElementById("base64Output").innerHTML = Base64.decode(input);
     document.getElementById("base32Output").innerHTML = base32Decode(input);
+	document.getElementById("ascii").innerHTML = asciiText(input);
     document.getElementById("uriOutput").innerHTML = uriText;
     document.getElementById("reversedOutput").innerHTML = reverseString(input);
     document.getElementById("binaryOutput").innerHTML = binary2Ascii(input);
@@ -824,6 +829,30 @@ function octToDecBytes(octBytes) {
   });
 }
 
+function asciiText(message){
+	var split = message.split(".");
+
+	var string = ""
+
+    for (var i = 0; i < split.length; i++) {
+		if (split[i].includes(" ")) {
+			var splittysplit = split[i].split(" ");
+			for (var j = 0; j< splittysplit.length; j++) {
+				var number = splittysplit[j];
+				var letter = String.fromCharCode(number)
+				string += letter;
+				if (j +1 < splittysplit.length) {
+					string += " " 
+				}
+			}
+		} else {
+			var number = split[i];
+			string += String.fromCharCode(number);;
+		}
+	}
+	
+    return string;
+}
 </script>
 </body>
 </html>
