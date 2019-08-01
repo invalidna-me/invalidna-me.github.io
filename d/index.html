@@ -171,10 +171,13 @@
     <td><p id="rot25"></p></td>
   </tr>
   <tr>
+    <td><input type="button" onclick="decode(rot47)" value="ROT47"></td>
+    <td><p id="rot47"></p></td>
+  </tr>
+  <tr>
     <td><input type="button" onclick="decode(scytale2)" value="scytale2"></td>
     <td><p id="scytale2"></p></td>
   </tr>
-  <tr>
   <tr>
     <td><input type="button" onclick="decode(scytale3)" value="scytale3"></td>
     <td><p id="scytale3"></p></td>
@@ -330,6 +333,7 @@ function decrypt(input) {
     document.getElementById("rot23").innerHTML = rot(23, input);
     document.getElementById("rot24").innerHTML = rot(24, input);
     document.getElementById("rot25").innerHTML = rot(25, input);
+    document.getElementById("rot47").innerHTML = rot47f(input);
 	
 	document.getElementById("polybius").innerHTML = polybius(input);
 	document.getElementById("polybiusFlipped").innerHTML = polybiusFlipped(input);
@@ -852,6 +856,24 @@ function asciiText(message){
 	}
 	
     return string;
+}
+
+function rot47f(x)
+{
+  var s = [];
+  for (var i = 0; i < x.length; i ++)
+  {
+    var j = x.charCodeAt(i);
+    if ((j >= 33) && (j <= 126))
+    {
+      s[i] = String.fromCharCode(33 + ((j + 14) % 94));
+    } 
+    else
+    {
+      s[i] = String.fromCharCode(j);
+    }
+  }
+  return s.join('');
 }
 </script>
 </body>
