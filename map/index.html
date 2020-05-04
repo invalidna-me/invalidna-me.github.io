@@ -1,0 +1,34 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Map</title>
+</head>
+<body>
+<form name="pointform" method="post">
+
+<div id="pointer_div" onclick="point_it(event)" style="background-image: url('map.jpg'); background-repeat: no-repeat; width: 731px; height: 724px;" >
+<p style="color:red;font-size:40px;margin-left: 200;" id="answerText"></p>
+
+</body>
+
+<script language="JavaScript" type="text/javascript">
+	String.prototype.lpad = function(padString, length) {
+		var str = this;
+		while (str.length < length)
+			str = padString + str;
+		return str;
+	}
+
+	function point_it(event) {
+		pos_x = event.offsetX ? (event.offsetX) : event.pageX - document.getElementById("pointer_div").offsetLeft;
+		pos_y = event.offsetY ? (event.offsetY) : event.pageY - document.getElementById("pointer_div").offsetTop;
+		var x = pos_x.toString(36).lpad("0", 2)
+		var y = pos_y.toString(36).lpad("0", 2)
+		
+		document.getElementById("answerText").innerHTML = x + y;
+		document.pointform.form_x.value = pos_x.toString(36);
+		document.pointform.form_y.value = pos_y.toString(36);
+	}
+</script>
+
+</html>
