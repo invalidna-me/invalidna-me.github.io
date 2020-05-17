@@ -24,13 +24,28 @@
 </style>
 <body>
 <form name="pointform" method="post">
+
 <div class="row">
   <div class="column">
   <input type="text" name="number" size="4" /><input type="button" onclick="SetUp()" value="Setup">
 	<table id="resultTable" >
     </table>
-<input type="button" onclick="Draw()" value="Plot">
+
 <input type="button" onclick="Clear()" value="Clear">
+<input type="checkbox" id="showAnswer" onchange="Draw()">
+<label for="showAnswer">Show Answer</label>
+<select name="example">
+    <option value="8n9v">Question 1</option>
+    <option value="3lbh">Question 2</option>
+    <option value="52f2">Question 3</option>
+    <option value="7p5Z">Question 4</option>
+    <option value="bsgh">Question 5</option>
+    <option value="50am">Question 6</option>
+    <option value="bx87">Question 7</option>
+    <option value="2b8p">Question 8</option>
+    <option value="djf7">Question 9</option>
+    <option value="ajaz">Question 10</option>
+</select>
 <p id="winnerText"></p>
   </div>
   <div class="column">
@@ -53,25 +68,30 @@
 	function Draw(){
 	  var img = document.getElementById("theImg");
 	  var cnvs = document.getElementById("myCanvas");
-	  
+	  var ctx = cnvs.getContext("2d");
 	  cnvs.style.position = "absolute";
 	  cnvs.style.left = img.offsetLeft + "px";
 	  cnvs.style.top = img.offsetTop + "px";
 	  
 	  console.log(img.offsetLeft +" "+img.offsetTop)
-	  ans = document.pointform.ans.value
+	  ans = document.pointform.example.value
 	  ansX = parseInt(ans.substring(0,2), 36);
 	  ansY = parseInt(ans.substring(2,4), 36);
 	  console.log(ansX + "," + ansY)
 	  
-	  var ctx = cnvs.getContext("2d");
-	  ctx.clearRect(0, 0, cnvs.width, cnvs.height);
-	  ctx.beginPath();
-	  ctx.arc(ansX, ansY, 10, 0, 2 * Math.PI, false);
-	  ctx.lineWidth = 3;
-	  ctx.strokeStyle = '#00ff00';
-	  ctx.fillStyle = '#00ff00'
-	  ctx.fill();
+	  if (document.getElementById("showAnswer").checked) {
+		  
+		  ctx.clearRect(0, 0, cnvs.width, cnvs.height);
+		  ctx.beginPath();
+		  ctx.arc(ansX, ansY, 10, 0, 2 * Math.PI, false);
+		  ctx.lineWidth = 3;
+		  ctx.strokeStyle = '#00ff00';
+		  ctx.fillStyle = '#00ff00'
+		  ctx.fill();
+		  ctx.fillStyle = '#000000'
+		  ctx.textAlign = "center";
+		  ctx.fillText("A", ansX, ansY); 
+	  }
 	  
 	  var rowNum = parseInt(document.pointform.number.value, 10);
 	  var minDistance = 99999999999999999
@@ -87,6 +107,9 @@
 	    ctx.lineWidth = 3;
 	    ctx.fillStyle = myMap.get(i-1); 
 	    ctx.fill();
+		ctx.fillStyle = '#000000'
+	    ctx.textAlign = "center";
+	    ctx.fillText(i, tempAnsX, tempAnsY); 
 		
 		var dist = Math.sqrt( Math.pow((ansX-tempAnsX), 2) + Math.pow((ansY-tempAnsY), 2) );
 		if (dist < minDistance) {
@@ -101,13 +124,14 @@
 	function Clear(){
 		var cnvs = document.getElementById("myCanvas");
 		var ctx = cnvs.getContext("2d");
-		document.pointform.ans.value = ""
+		ctx.clearRect(0, 0, cnvs.width, cnvs.height);
 		var rowNum = parseInt(document.pointform.number.value, 10);
 		for (var i = 1; i <=rowNum; i++){
 			answerId = "ans" + i
 			document.pointform.elements[answerId].value = ""
 		}
-		 document.getElementById("winnerText").innerHTML = "";
+		document.getElementById("winnerText").innerHTML = "";
+		document.getElementById("showAnswer").checked = false;
 	}
 	
 	function getRandomColor() {
@@ -123,17 +147,18 @@
 	function SetUp(){
 		var table = document.getElementById("resultTable")
 		var rowNum = parseInt(document.pointform.number.value, 10);
-		var resultHtml = '<tr><td></td><td>Answer</td><td><input type="text" name="ans" size="4" /></td>';
+		var resultHtml = '';
 		
 		for(var i = 0 ; i < rowNum ; i++) {
 			color = getRandomColor()
 			myMap.set(i, color);
+			tabIndex = 10 + i
 			resultHtml += ["<tr style=background-color:"+color+">", 
 		 "<td>", 
 		  (i+1),
 		 "</td>",
 		 '<td><input type="name" name="name'+(i+1)+'" placeholder="Name"></td>',
-		 '<td><input type="name" name="ans'+(i+1)+'" placeholder="Answer"></td>',
+		 '<td><input type="name" name="ans'+(i+1)+'" placeholder="Answer" onfocusout="Draw()" maxlength="4" size="4" tabindex="'+tabIndex+'"></td>',
 		 '</tr>'].join("\n");
 		}  
 		
