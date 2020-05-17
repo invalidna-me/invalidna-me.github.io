@@ -31,10 +31,10 @@
 	<table id="resultTable" >
     </table>
 
-<input type="button" onclick="Clear()" value="Clear">
-<input type="checkbox" id="showAnswer" onchange="Draw()">
+<input type="button" onclick="Clear()" value="Next">
+<input type="checkbox" id="showAnswer" onchange="Draw()" tabIndex=30>
 <label for="showAnswer">Show Answer</label>
-<select name="example">
+<select name="example" id="answerCombo">
     <option value="8n9v">Question 1</option>
     <option value="3lbh">Question 2</option>
     <option value="52f2">Question 3</option>
@@ -118,7 +118,9 @@
 			minDistance = dist
 		}
 	  }
-	  document.getElementById("winnerText").innerHTML = "Winner is " + winner;
+	  if (document.getElementById("showAnswer").checked) {
+		document.getElementById("winnerText").innerHTML = "Winner is " + winner;
+	  }
 	}
 	
 	function Clear(){
@@ -132,6 +134,7 @@
 		}
 		document.getElementById("winnerText").innerHTML = "";
 		document.getElementById("showAnswer").checked = false;
+		document.getElementById("answerCombo").selectedIndex = document.getElementById("answerCombo").selectedIndex + 1
 	}
 	
 	function getRandomColor() {
