@@ -311,7 +311,7 @@ function packetForge(apMac, mac, device) {
 }
 
 
-function replayAttack(apMac, mac, device) {
+function replayAttack(device) {
 	return `sudo aireplay-ng -2 -r arpRequest ${device}`
 }
 
