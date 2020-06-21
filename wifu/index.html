@@ -279,7 +279,7 @@ function captureCommand(device, channel, ssid) {
 }
 
 function monitorMode(device, channel) {
-	return `sudo iwconfig ${device} mode monitor`
+	return `sudo iwconfig ${device} mode monitor` + "</td><td>" + `airmon-ng start ${device} ${channel}`
 }
 
 function fakeAuth(ssid, apMac, mac, device) {
