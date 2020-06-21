@@ -84,7 +84,7 @@ body {font-family: Arial;}
   <p id="sharedKeyWEPoutput"></</p>
 </div>
 
-<div id="Shared Key WEP" class="tabcontent">
+<div id="WPA" class="tabcontent">
   <h3>WPA</h3>
   <p id="wpaOutput"></</p>
 </div>
@@ -182,7 +182,7 @@ function searchCommand() {
 	var ipSplit = ipLinkShowInput.split(" ");
 	var deviceName = ipSplit[1];
 	deviceName = deviceName.substring(0, deviceName.length - 1);
-	document.getElementById("searchCommand").innerHTML = `sudo airodump-ng ${deviceName} -t WEP` + '<img src="copy.png" onclick="copyLine(this)">'
+	document.getElementById("searchCommand").innerHTML = `sudo airodump-ng ${deviceName}` + '<img src="copy.png" onclick="copyLine(this)">'
 }
 	
 function myFunction() {
