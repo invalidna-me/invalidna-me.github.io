@@ -279,7 +279,7 @@ function captureCommand(device, channel, ssid) {
 }
 
 function monitorMode(device, channel) {
-	return `sudo iwconfig ${device} mode monitor` + "</td><td>" + `airmon-ng start ${device} ${channel}`
+	return `sudo iwconfig ${device} mode monitor` + copyButton() + "</td><td>" + `airmon-ng start ${device} ${channel}`
 }
 
 function fakeAuth(ssid, apMac, mac, device) {
@@ -335,6 +335,71 @@ function deauthAttack(apMac, victimMac, device) {
 	}
 }
 </script>
+<center>
+<table>
+<tr>
+<td>
+<table border="1">
+<tbody>
+	<tr>
+		<th>key</th>
+		<th>what it does</th>
+	</tr>
+	<tr>
+		<td>ctrl-b, %</td>
+		<td>split the screen in half from left to right</td>
+	</tr>
+	<tr>
+		<td>ctrl-b, "</td>
+		<td>split the screen in half from top to bottom</td>
+	</tr>
+	<tr>
+		<td>ctrl-b, x</td>
+		<td>kill the current pane</td>
+	</tr>
+	<tr>
+		<td>ctrl-b, &lt;arrow key&gt;</td>
+		<td>switch to the pane in whichever direction you press</td>
+	</tr>
+</table>
+</td>
+<td>
+<table border="1">
+<tbody>
+	<tr>
+		<th>key</th>
+		<th>what it does</th>
+	</tr>
+	<tr>
+		<td>ctrl-b, c</td>
+		<td>Create window</td>
+	</tr>
+	<tr>
+		<td>ctrl-b, ,</td>
+		<td>Rename window</td>
+	</tr>
+	<tr>
+		<td>ctrl-b, &</td>
+		<td>Close current window</td>
+	</tr>
+	<tr>
+		<td>ctrl-b, p</td>
+		<td>Previous window</td>
+	</tr>
+	<tr>
+		<td>ctrl-b, n</td>
+		<td>Next window</td>
+	</tr>
+	<tr>
+		<td>ctrl-b, 0...9</td>
+		<td>Select window by number</td>
+	</tr>
+</table>
+
+</td>
+</tr>
+</table>
+</center>
 </body>
 
 </html>
