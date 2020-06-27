@@ -45,7 +45,7 @@ body {font-family: Arial;}
 </head>
 <body>
 <form id="frm1">
-	<p>ip link show<img src="copy.png" onclick="copyLine(this)"></p>
+	<p>tmux new "ip link show; bash"<img src="copy.png" onclick="copyLine(this)"></p>
 	<input type="text" id="ipLinkShowInput" style="width:100%" autofocus onKeyUp ="searchCommand()"><br>
 	<p id="searchCommand"></p>
 	<input type="text" id="airodumpInput" style="width:100%" autofocus><br>
@@ -184,7 +184,7 @@ function searchCommand() {
 	var ipSplit = ipLinkShowInput.split(" ");
 	var deviceName = ipSplit[1];
 	deviceName = deviceName.substring(0, deviceName.length - 1);
-	document.getElementById("searchCommand").innerHTML = `sudo airodump-ng ${deviceName}` + '<img src="copy.png" onclick="copyLine(this)">'
+	document.getElementById("searchCommand").innerHTML = sudo() + `airodump-ng ${deviceName}` + '<img src="copy.png" onclick="copyLine(this)">'
 }
 	
 function myFunction() {
@@ -201,8 +201,6 @@ function myFunction() {
 	var deviceName = ipSplit[1];
 	deviceName = deviceName.substring(0, deviceName.length - 1);
 	var mac = ipSplit[16].toUpperCase()
-	
-	document.getElementById("searchCommand").innerHTML = `sudo airodump-ng ${deviceName} -t WEP` + '<img src="copy.png" onclick="copyLine(this)">'
 		
 	document.getElementById("classicWEPoutput").innerHTML = 
 		"<table style='width:100%'>"
@@ -280,7 +278,7 @@ function postamble() {
 }
 
 function setup() {
-	return sudo() + "airmon-ng check kill; sudo airmon-ng check kill";
+	return sudo() + "airmon-ng check kill; " + sudo() + "airmon-ng check kill";
 }
 
 function captureCommand(device, channel, ssid) {
