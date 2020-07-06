@@ -195,7 +195,7 @@ function myFunction() {
 	var airoSplit = airodumpInput.split(" ");
 	var apMac = airoSplit[0];
 	var channel = airoSplit[5];
-	var ssid = airoSplit[9];
+	var ssid = airoSplit[airoSplit.length - 1];
 	
 	var ipSplit = ipLinkShowInput.split(" ");
 	var deviceName = ipSplit[1];
