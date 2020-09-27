@@ -1,0 +1,59 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Flip Clock</title>
+</head>
+<style>
+body {
+	background-color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	color:rgb(186, 186, 186); 
+	
+}
+table {
+	width: 100%;
+	height:100%;
+	text-align:center;
+	border-spacing: 50px;
+}
+tr {
+    line-height: 0;
+	height:100%;
+}
+td {	
+    padding: 10px 0px;
+    border-radius: 100px;
+    background: rgb(15, 15, 15);
+    height:100%;
+	font-size: 600px;
+}
+td:after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 10px;
+    background-color: black;
+    position: relative;
+}
+</style>
+<body>
+<center>
+<table>
+    <tr>
+        <td><p id="hour"/></td>
+		<td><p id="mins"/></td>
+    </tr>
+</table>
+
+</center>
+<script>
+function updateClock() {
+  var d = new Date();
+
+document.getElementById("hour").innerHTML = d.getHours();
+document.getElementById("mins").innerHTML = d.getMinutes();
+}
+setInterval(updateClock, 1000);
+</script>
+</body>
+</html>
