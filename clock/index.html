@@ -50,8 +50,8 @@ td:after {
 function updateClock() {
   var d = new Date();
 
-document.getElementById("hour").innerHTML = d.getHours();
-document.getElementById("mins").innerHTML = d.getMinutes();
+document.getElementById("hour").innerHTML = ("00" + d.getHours()).slice(-2);
+document.getElementById("mins").innerHTML = ("00" + d.getMinutes()).slice(-2);
 }
 setInterval(updateClock, 1000);
 </script>
