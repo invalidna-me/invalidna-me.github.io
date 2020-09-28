@@ -1,0 +1,141 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Courier; 
+  font-size: 24px; 
+  font-weight: bold;
+}
+html, body {
+	height: 100%;
+}
+
+#container {
+	min-height: 100%; /* use min-height not height, to prevent overlap */
+	margin-bottom: -36px; /* = #footer height+padding+border, to prevent overlap */
+}
+
+.container {
+  min-height: 100%; /* use min-height not height, to prevent overlap */
+  margin-bottom: -36px; /* = #footer height+padding+border, to prevent overlap */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-area {
+  display: grid;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  grid-template-columns: auto auto auto;
+}
+
+.block {
+  display: flex;
+  width: 100px;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: bold;
+  border: 1px solid grey;
+  transition: background 0.2s ease-in-out;
+}
+
+.block:hover {
+  cursor: pointer;
+}
+
+.occupied:hover {
+  cursor: not-allowed;
+}
+
+.finished0 {
+  color: green;
+}
+.finished4 {
+  color: red;
+}
+
+
+#block_0,
+#block_1,
+#block_2 {
+  border-top: none;
+}
+
+#block_0,
+#block_3,
+#block_6 {
+  border-left: none;
+}
+
+#block_6,
+#block_7,
+#block_8 {
+  border-bottom: none;
+}
+
+#block_2,
+#block_5,
+#block_8 {
+  border-right: none;
+}
+
+button {
+  outline: none;
+  border: 0px solid green;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  background: none;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.playerWin {
+  color: green;
+}
+
+.computerWin {
+  color: red;
+}
+
+.draw {
+  color: orangered;
+}
+#footer-spacer {
+	height: 36px; /* = #container margin-bottom plus any extra space required between #container and #footer */
+}
+#footer {
+	border-top: 1px solid #000;
+	height: 35px;
+	text-decoration: none; 
+	color: #333;
+}
+a {
+	text-decoration: none; 
+	color: #333; 
+}
+@media only screen and (max-width: 600px) {
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5em;
+  }
+
+  h2 {
+    margin-top: 1em;
+    font-size: 1.3rem;
+  }
+  
+}
