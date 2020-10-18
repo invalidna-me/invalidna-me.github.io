@@ -7,7 +7,7 @@
 <form id="frm1">
   Input: <input type="text" id="inputBox" style="width:50%" autofocus><br>
   Key:      <input type="text" id="keyBox" style="width:50%" autofocus><br>
-  <input type="button" onclick="myFunction()" value="Submit">
+  <input type="button" onclick="xor_str()" value="Submit">
 </form>
 
  <table>
@@ -17,25 +17,8 @@
   </tr>
 </table> 
 
-<script>
+<script src="javascript.js">
 
-function myFunction() {	
-	xor_str();
-}
-
-function xor_str()
-{
-	var to_enc = document.getElementById("inputBox").value;
-	var xor_key=document.getElementById("keyBox").value;
-	
-	var the_res="";//the result will be here
-	for(i=0;i<to_enc.length;++i)
-	{
-		the_res+=String.fromCharCode(xor_key.charCodeAt(i % xor_key.length)^to_enc.charCodeAt(i));
-	}
-	
-	document.getElementById("output").innerHTML = the_res
-}
 
 </script>
 </body>
