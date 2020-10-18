@@ -13,7 +13,9 @@
 <div id="map"></div>
 
 </body>
-<script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<link href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" rel="stylesheet"/>
+<script >
 var text, parser, xmlDoc;
 
 text = 
@@ -21,9 +23,11 @@ text =
 
 parser = new DOMParser();
 xmlDoc = parser.parseFromString(text,"text/xml");
+var map;
 
 function myFunction() {
 	document.getElementById("results").innerHTML = ""
+	document.getElementById("map").innerHTML = ""
 	var birthday = document.getElementById("birthday").valueAsDate;
 	var year = "Y" + birthday.getFullYear();
 	var month = "M" + (birthday.getMonth() + 1); 
@@ -52,14 +56,40 @@ function myFunction() {
 	for (i = 0; i < myNodelist.length; i++) {
 	  testOutpt = testOutpt + myNodelist[i].getAttribute("Series") + " - " 
 	  testOutpt = testOutpt + myNodelist[i].getAttribute("Shot") + " - " 
-	  testOutpt = testOutpt + myNodelist[i].getAttribute("Time") + " - " 
-	  testOutpt = testOutpt + myNodelist[i].getAttribute("Longitude") + " - "
-	  testOutpt = testOutpt + myNodelist[i].getAttribute("Latitude")
+	  testOutpt = testOutpt + myNodelist[i].getAttribute("Time")
 	  testOutpt = testOutpt + "\n"
 	  longitude = myNodelist[i].getAttribute("Longitude")
 	  latitude = myNodelist[i].getAttribute("Latitude")
 	}
 
+
+	// Where you want to render the map.
+	var element = document.getElementById('map');
+
+	// Height has to be set. You can do this in CSS too.
+	element.style = 'height:600px;';
+
+	if (map != undefined) { 
+		map.off();
+		map.remove(); 
+	} 
+
+	// Create Leaflet map on map element.
+	map = L.map(element);
+
+	// Add OSM tile leayer to the Leaflet map.
+	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
+
+	// Target's GPS coordinates.
+	var target = L.latLng(latitude, longitude);
+
+	// Set map's center to target with zoom 14.
+	map.setView(target, 14);
+
+	// Place a marker on the same location.
+	L.marker(target).addTo(map);
 	
 	document.getElementById("results").innerHTML = testOutpt
 }
