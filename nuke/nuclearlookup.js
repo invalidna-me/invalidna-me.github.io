@@ -8,7 +8,7 @@ xmlDoc = parser.parseFromString(text,"text/xml");
 var map;
 
 function checkDate() {
-	document.getElementById("results").innerHTML = ""
+	document.getElementById("results").innerHTML = "No test found on this date"
 	document.getElementById("map").innerHTML = ""
 	var birthday = document.getElementById("birthday").valueAsDate;
 	var year = "Y" + birthday.getFullYear();
