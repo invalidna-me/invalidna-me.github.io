@@ -7,7 +7,7 @@ parser = new DOMParser();
 xmlDoc = parser.parseFromString(text,"text/xml");
 var map;
 
-function myFunction() {
+function checkDate() {
 	document.getElementById("results").innerHTML = ""
 	document.getElementById("map").innerHTML = ""
 	var birthday = document.getElementById("birthday").valueAsDate;
