@@ -49,11 +49,6 @@ function myFunction() {
 	  longitude = myNodelist[i].getAttribute("Longitude")
 	  latitude = myNodelist[i].getAttribute("Latitude")
 	}
-	
-	const map = new google.maps.Map(document.getElementById("map"), {
-		zoom: 11,
-		center: { lat: 41.876, lng: -87.624 },
-	  });
 
 	
 	document.getElementById("results").innerHTML = testOutpt
