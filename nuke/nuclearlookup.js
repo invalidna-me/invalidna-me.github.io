@@ -73,7 +73,7 @@ function checkDate() {
 	if (i == 1) {
 		map.setView(target, 10);
 	} else {
-		map.setView(target, 3);
+		map.setView(target, 2);
 	}
 
 	document.getElementById("results").innerHTML = testOutpt
