@@ -30,10 +30,20 @@ function myFunction() {
 	var day = "D" + (birthday.getDate() + 1);
 	
 	var year = xmlDoc.childNodes[0].querySelector(year);
+	
+	if (year == null)
+		return
+		
 	var month = year.querySelector(month)
+	
+	if (month == null)
+		return
+	
 	var date = month.querySelector(day);
 	
-	
+	if (date == null)
+		return;
+		
 	myNodelist = date.querySelectorAll("Test")
 	var i;
 	var longitude;
