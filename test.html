@@ -1,9 +1,39 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-	<title>Test Page</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Link Test</title>
+<style>
+  body { font-family: sans-serif; font-size: 20px; padding: 16px; line-height: 2.2; }
+  a, button { font-size: 20px; display: block; margin: 10px 0; }
+  button { padding: 12px; width: 100%; }
+  h2 { margin-top: 24px; }
+</style>
 </head>
-
 <body>
-<a href="intent:#Intent;action=android.settings.APPLICATION_DEVELOPMENT_SETTINGS;end">Intent 1</a>
+<h1>Link Test</h1>
+<p>Tap each. Note: no-op / chooser / direct launch.</p>
+
+<h2>Anchor hrefs (intent: scheme)</h2>
+<a href="intent:#Intent;action=android.settings.APPLICATION_DEVELOPMENT_SETTINGS;end">1. Developer options</a>
+<a href="intent:#Intent;action=android.settings.SETTINGS;end">2. Settings</a>
+<a href="intent:#Intent;action=android.settings.WIFI_SETTINGS;end">3. Wi-Fi settings</a>
+<a href="intent:#Intent;action=android.settings.DEVICE_INFO_SETTINGS;end">4. About device</a>
+<a href="intent:#Intent;component=com.mediatek.engineermode/.EngineerMode;end">5. EngineerMode</a>
+<a href="intent:#Intent;component=net.grandpad.falcon/.activities.InfoActivity;end">6. Falcon InfoActivity</a>
+<a href="intent:#Intent;action=android.settings.SETTINGS;S.browser_fallback_url=https%3A%2F%2Fexample.com;end">7. Settings (w/ fallback)</a>
+
+<h2>Other schemes</h2>
+<a href="market://details?id=com.android.chrome">8. market:// (Play)</a>
+<a href="file:///sdcard/">9. file:///sdcard/</a>
+<a href="content://com.android.externalstorage.documents/root/primary">10. content:// storage</a>
+<a href="tel:*%23*%23checkin%23*%23*">11. tel: (secret-code style)</a>
+
+<h2>JS-initiated redirects (button → location.href)</h2>
+<p>Tests whether the WebView follows a script-driven intent (bypasses href sanitization).</p>
+<button onclick="location.href='intent:#Intent;action=android.settings.APPLICATION_DEVELOPMENT_SETTINGS;end'">JS → Developer options</button>
+<button onclick="location.href='intent:#Intent;action=android.settings.SETTINGS;end'">JS → Settings</button>
+<button onclick="window.open('intent:#Intent;action=android.settings.SETTINGS;end','_blank')">window.open → Settings</button>
 </body>
-</html
+</html>
