@@ -59,6 +59,23 @@
 <button onclick="navigator.share?navigator.share({title:'t',text:'breakout',url:'https://example.com'}).then(()=>log('share: OK (sheet shown)')).catch(e=>log('share err: '+e)):log('navigator.share UNSUPPORTED')">navigator.share() → native share sheet</button>
 <button onclick="try{new PaymentRequest([{supportedMethods:'https://google.com/pay'}],{total:{label:'x',amount:{currency:'USD',value:'1'}}}).show().then(r=>log('pay shown')).catch(e=>log('pay err: '+e))}catch(e){log('PaymentRequest err: '+e)}">PaymentRequest.show()</button>
 
+<h3>navigator.share variants (watch for a chooser)</h3>
+<button onclick="navigator.share({url:'https://example.com'}).then(()=>log('share url OK')).catch(e=>log('share url: '+e))">share URL only</button>
+<button onclick="navigator.share({text:'hello breakout'}).then(()=>log('share text OK')).catch(e=>log('share text: '+e))">share text only</button>
+<button onclick="navigator.share({title:'t'}).then(()=>log('share title OK')).catch(e=>log('share title: '+e))">share title only</button>
+<button onclick="(function(){try{var f=new File(['x'],'t.txt',{type:'text/plain'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]}).then(()=>log('share file OK')).catch(e=>log('share file: '+e));}else{log('canShare({files}) = false');}}catch(e){log('share file err: '+e)}})()">share a file</button>
+
+<h3>Native pickers via other Web APIs</h3>
+<button onclick="(navigator.contacts&&navigator.contacts.select)?navigator.contacts.select(['name','tel'],{multiple:false}).then(c=>log('contacts: '+JSON.stringify(c))).catch(e=>log('contacts: '+e)):log('Contact Picker API unsupported')">Contact Picker</button>
+<button onclick="window.showOpenFilePicker?window.showOpenFilePicker().then(()=>log('openFilePicker OK')).catch(e=>log('openFilePicker: '+e)):log('showOpenFilePicker unsupported')">showOpenFilePicker()</button>
+<button onclick="window.showSaveFilePicker?window.showSaveFilePicker({suggestedName:'t.txt'}).then(()=>log('saveFilePicker OK')).catch(e=>log('saveFilePicker: '+e)):log('showSaveFilePicker unsupported')">showSaveFilePicker()</button>
+<button onclick="window.showDirectoryPicker?window.showDirectoryPicker().then(()=>log('dirPicker OK')).catch(e=>log('dirPicker: '+e)):log('showDirectoryPicker unsupported')">showDirectoryPicker()</button>
+<button onclick="navigator.mediaDevices?navigator.mediaDevices.getUserMedia({video:true}).then(()=>log('camera OK (prompt?)')).catch(e=>log('camera: '+e)):log('mediaDevices unsupported')">getUserMedia (camera)</button>
+<button onclick="(function(){var i=document.createElement('input');i.type='file';i.accept='*/*';i.onchange=function(){log('file chosen: '+(i.files[0]?i.files[0].name:'?'));};i.click();})()">programmatic file input</button>
+
+botton onlic
+
+
 <h2>Injected JS bridge hunt (JS → native)</h2>
 <button onclick="dumpBridges()">List suspicious window.* objects</button>
 <pre id="out" style="white-space:pre-wrap;border:1px solid #000;padding:8px;min-height:60px;font-size:14px"></pre>
