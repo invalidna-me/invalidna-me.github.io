@@ -73,7 +73,11 @@
 <button onclick="navigator.mediaDevices?navigator.mediaDevices.getUserMedia({video:true}).then(()=>log('camera OK (prompt?)')).catch(e=>log('camera: '+e)):log('mediaDevices unsupported')">getUserMedia (camera)</button>
 <button onclick="(function(){var i=document.createElement('input');i.type='file';i.accept='*/*';i.onchange=function(){log('file chosen: '+(i.files[0]?i.files[0].name:'?'));};i.click();})()">programmatic file input</button>
 
-botton onlic
+<h3>Sensor exposure (CONFIRMED: camera works) — scope mic + location</h3>
+<button onclick="navigator.mediaDevices.getUserMedia({audio:true}).then(()=>log('MIC OK')).catch(e=>log('mic: '+e))">getUserMedia (microphone)</button>
+<button onclick="navigator.mediaDevices.getUserMedia({audio:true,video:true}).then(()=>log('CAM+MIC OK')).catch(e=>log('cam+mic: '+e))">getUserMedia (camera + mic)</button>
+<button onclick="navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>log('GEO OK: '+p.coords.latitude+','+p.coords.longitude),e=>log('geo: '+e.message)):log('geolocation unsupported')">geolocation</button>
+<button onclick="(function(){navigator.mediaDevices.getUserMedia({video:true}).then(s=>{log('CAM re-access (persisted grant? no prompt = silent)');s.getTracks().forEach(t=>t.stop());}).catch(e=>log('cam2: '+e))})()">camera again (test silent re-access)</button>
 
 
 <h2>Injected JS bridge hunt (JS → native)</h2>
