@@ -35,5 +35,53 @@
 <button onclick="location.href='intent:#Intent;action=android.settings.APPLICATION_DEVELOPMENT_SETTINGS;end'">JS → Developer options</button>
 <button onclick="location.href='intent:#Intent;action=android.settings.SETTINGS;end'">JS → Settings</button>
 <button onclick="window.open('intent:#Intent;action=android.settings.SETTINGS;end','_blank')">window.open → Settings</button>
+
+<h2>Non-scheme breakouts (no URL scheme — different Android handoff)</h2>
+
+<p>File picker → DocumentsUI (file manager):</p>
+<input type="file">
+
+<p>Print → print framework → "Save as PDF" → DocumentsUI:</p>
+<button onclick="window.print()">window.print()</button>
+
+<p>Downloads (trigger WebView DownloadListener):</p>
+<a href="data:text/plain;base64,dGVzdA==" download="test.txt">Download test.txt (data URI)</a>
+<button onclick="(function(){var b=new Blob(['PK'],{type:'application/vnd.android.package-archive'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='test.apk';document.body.appendChild(a);a.click();})()">Download test.apk (blob)</button>
+
+<p>Long-press these (context menu → Share / Open in new tab / Download image):</p>
+<a href="https://example.com">Long-press this link</a>
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAAABCAYAAAA/ImjpAAAAEklEQVR4nGP8z8Dwn4EIwDiqEAAq9gQkAAAAAElFTkSuQmCC" alt="long-press me" style="width:100%;height:24px;border:1px solid #000">
+
+<p>Select the text below, then use the selection toolbar (Share / Web search / Assist):</p>
+<p style="user-select:text">SELECT-ME-AND-SHARE breakout test string for the floating selection toolbar.</p>
+
+<h2>Web APIs that hand off without a URL scheme</h2>
+<button onclick="navigator.share?navigator.share({title:'t',text:'breakout',url:'https://example.com'}).then(()=>log('share: OK (sheet shown)')).catch(e=>log('share err: '+e)):log('navigator.share UNSUPPORTED')">navigator.share() → native share sheet</button>
+<button onclick="try{new PaymentRequest([{supportedMethods:'https://google.com/pay'}],{total:{label:'x',amount:{currency:'USD',value:'1'}}}).show().then(r=>log('pay shown')).catch(e=>log('pay err: '+e))}catch(e){log('PaymentRequest err: '+e)}">PaymentRequest.show()</button>
+
+<h2>Injected JS bridge hunt (JS → native)</h2>
+<button onclick="dumpBridges()">List suspicious window.* objects</button>
+<pre id="out" style="white-space:pre-wrap;border:1px solid #000;padding:8px;min-height:60px;font-size:14px"></pre>
+
+<script>
+function log(m){var o=document.getElementById('out');o.textContent+=m+'\n';}
+function dumpBridges(){
+  var names=Object.getOwnPropertyNames(window);
+  var rx=/android|grand|falcon|hawk|eagle|cobra|bridge|native|jsinterf|interop|_app|sdk|webkit/i;
+  var hits=[];
+  names.forEach(function(n){
+    try{
+      var v=window[n];
+      var t=typeof v;
+      if((t==='object'||t==='function') && rx.test(n)){
+        var methods=[];
+        try{for(var k in v){if(typeof v[k]==='function')methods.push(k);}}catch(e){}
+        hits.push(n+' ('+t+')'+(methods.length?' methods: '+methods.join(','):''));
+      }
+    }catch(e){}
+  });
+  log(hits.length? 'POSSIBLE BRIDGES:\n'+hits.join('\n') : 'no suspicious globals found');
+}
+</script>
 </body>
 </html>
